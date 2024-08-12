@@ -2,9 +2,12 @@
   "extends": [
     "@titicaca/eslint-config-triple",
     "@titicaca/eslint-config-triple/requiring-type-checking",
-    "@titicaca/eslint-config-triple/prettier"
+    "@titicaca/eslint-config-triple/prettier",
+    "next"
   ],
   "rules": {
-    "no-console": "warn" /* "error" -> "off"로 변경 */
+    "no-console": "warn" /* "error" -> "off"로 변경 */,
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-page-custom-font": "off"
   }
 }
