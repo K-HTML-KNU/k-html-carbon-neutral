@@ -3,5 +3,8 @@
     "@titicaca/eslint-config-triple",
     "@titicaca/eslint-config-triple/requiring-type-checking",
     "@titicaca/eslint-config-triple/prettier"
-  ]
+  ],
+  "rules": {
+    "no-console": "off" /* "error" -> "off"로 변경 */
+  }
 }
