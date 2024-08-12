@@ -7,28 +7,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model User {
-//   id       Int     @id @default(autoincrement())
-//   name     String  @db.VarChar(100)
-//   email    String  @unique @db.VarChar(100)
-//   password String  @db.VarChar(100)
-//   image    String? @db.VarChar(255)
-//   files    Photo[]
-// }
-
-// model Photo {
-//   id         Int      @id @default(autoincrement())
-//   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   userId     Int
-//   fileName   String   @db.VarChar(255)
-//   filePath   String   @db.VarChar(255)
-//   uploadedAt DateTime @default(now())
-// }
-
 model User {
   id              Int               @id @default(autoincrement())
-  carbon_reduce   Int
-  email           String
+  carbon_reduce   Int               @default(0)
+  email           String            @unique
   name            String
   UserIngredients UserIngredients[]
   recipeHistory   RecipeHistory[]   @relation("UserRecipeHistory")
