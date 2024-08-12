@@ -15,7 +15,10 @@
   "dependencies": {
     "@primer/css": "^21.3.6",
     "@prisma/client": "^5.18.0",
+    "@radix-ui/react-alert-dialog": "^1.1.1",
+    "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-slot": "^1.1.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/formidable": "^3.4.5",
     "@types/mime-types": "^2.1.4",
