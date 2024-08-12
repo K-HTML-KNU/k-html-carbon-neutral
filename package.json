@@ -22,8 +22,6 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/formidable": "^3.4.5",
     "@types/mime-types": "^2.1.4",
-    "aws-sdk": "^2.1671.0",
-    "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "formidable": "^3.5.1",
