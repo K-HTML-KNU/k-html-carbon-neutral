@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
+
 import './globals.css'
+import Header from '@/components/Header'
 
 export const metadata: Metadata = {
   title: 'k-html carbon neutral',
@@ -13,7 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body style={{ maxWidth: '640px', margin: '0 auto' }}>{children}</body>
-    </html>
+      <body style={{ maxWidth: '640px', margin: '0 auto', width: '100%', boxSizing: 'content-box' }}>
+        <Header />
+        <main>
+          {children}
+        </main>
+      </body>
+    </html >
   )
 }
