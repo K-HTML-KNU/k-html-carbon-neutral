@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// model User {
+//   id       Int     @id @default(autoincrement())
+//   name     String  @db.VarChar(100)
+//   email    String  @unique @db.VarChar(100)
+//   password String  @db.VarChar(100)
+//   image    String? @db.VarChar(255)
+//   files    Photo[]
+// }
+
+// model Photo {
+//   id         Int      @id @default(autoincrement())
+//   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   userId     Int
+//   fileName   String   @db.VarChar(255)
+//   filePath   String   @db.VarChar(255)
+//   uploadedAt DateTime @default(now())
+// }
+
+model User {
+  id              Int               @id @default(autoincrement())
+  carbon_reduce   Int
+  email           String
+  name            String
+  UserIngredients UserIngredients[]
+  recipeHistory   RecipeHistory[]   @relation("UserRecipeHistory")
+}
+
+model RecipeHistory {
+  id                       Int                        @id @default(autoincrement())
+  name                     String
+  nutrition_info           String
+  review                   Int
+  RecipeHistoryIngredients RecipeHistoryIngredients[]
+  user                     User                       @relation("UserRecipeHistory", fields: [user_id], references: [id])
+  user_id                  Int
+}
+
+model Ingredients {
+  id                       Int                        @id @default(autoincrement())
+  name                     String
+  nutrition_info           String?
+  storage_method           String?
+  disposal_method          String?
+  category                 IngredientCategory         @relation(fields: [category_id], references: [id])
+  category_id              Int
+  RecipeHistoryIngredients RecipeHistoryIngredients[]
+  UserIngredients          UserIngredients[]
+}
+
+model RecipeHistoryIngredients {
+  id                Int           @id @default(autoincrement())
+  ingredients       Ingredients   @relation(fields: [ingredients_id], references: [id])
+  ingredients_id    Int
+  recipeHistory     RecipeHistory @relation(fields: [recipe_history_id], references: [id])
+  recipe_history_id Int
+}
+
+model UserIngredients {
+  id             Int         @id @default(autoincrement())
+  ingredients    Ingredients @relation(fields: [ingredients_id], references: [id])
+  ingredients_id Int
+  user           User        @relation(fields: [user_id], references: [id])
+  user_id        Int
+}
+
+model IngredientCategory {
+  id          Int           @id @default(autoincrement())
+  name        String
+  ingredients Ingredients[]
+}
