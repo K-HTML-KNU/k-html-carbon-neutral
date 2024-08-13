@@ -9,7 +9,7 @@ import LEFT_ARROW from '@/src/images/left-arrow.svg';
 
 const TITLE_MAP: { [key: string]: string } = {
   "/": "홈페이지",
-  "/mypage": "마이페이지",
+  "/mypage": "내정보",
   "/recommend": "추천",
   "/fridge": "냉장고"
 }
@@ -24,7 +24,7 @@ export default function Header() {
   }, [pathname])
 
   return (
-    <header className="flex justify-center items-center h-[56px] box-content border-b-[1px] border-black relative">
+    <header className="flex justify-center items-center h-[56px] box-content border-b-[1px] border-black relative px-[16px]">
       {pathname !== "/" && (
         <Link href="/" className="absolute left-0">
           <Image src={LEFT_ARROW as string} alt="뒤로가기" />
