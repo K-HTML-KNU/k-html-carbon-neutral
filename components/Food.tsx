@@ -23,31 +23,44 @@ import Oil from '@/meta/images/food/oil.png'
 import { Button } from './ui/button'
 
 export type FoodType =
-  "Default category" |
-  "Grains and Starches" |
-  "Vegetables" |
-  "Fruits" |
-  "Meat" |
-  "Seafood" |
-  "Dairy and Eggs" |
-  "Legumes and Nuts" |
-  "Condiments and Spices" |
-  "Fats and Oils" |
-  "Other Processed Foods";
+  | 'Default category'
+  | 'Grains and Starches'
+  | 'Vegetables'
+  | 'Fruits'
+  | 'Meat'
+  | 'Seafood'
+  | 'Dairy and Eggs'
+  | 'Legumes and Nuts'
+  | 'Condiments and Spices'
+  | 'Fats and Oils'
+  | 'Other Processed Foods'
 
 const FOOD_IMAGES_MAP: { [key: string]: StaticImageData } = {
-  "Dairy and Eggs": EGG,
-  "Fruits": FRUIT,
-  "Grains and Starches": GRAIN,
-  "Legumes and Nuts": LEGUME,
-  "Meat": MEET,
-  "Condiments and Spices": SALT,
-  "Seafood": SEAFOOD,
-  "Vegetables": VEGETABLE,
-  "Fats and Oils": Oil
+  'Dairy and Eggs': EGG,
+  Fruits: FRUIT,
+  'Grains and Starches': GRAIN,
+  'Legumes and Nuts': LEGUME,
+  Meat: MEET,
+  'Condiments and Spices': SALT,
+  Seafood: SEAFOOD,
+  Vegetables: VEGETABLE,
+  'Fats and Oils': Oil,
 }
 
-export default function Food({
+async function getRecommendRecipe(foodName: string) {
+  const response = await fetch(
+    'https://vwekbsqcaf.execute-api.ap-northeast-2.amazonaws.com/default/Openai-Food-HelloWorldFunction-X8zN5be3fV7J',
+    {
+      method: 'POST',
+      body: JSON.stringify({ ingredient_name: foodName }),
+    },
+  )
+  const data = await response.json()
+  console.log('foodData', data)
+  return data
+}
+
+export default async function Food({
   type,
   name,
   description,
@@ -65,18 +78,17 @@ export default function Food({
       <DrawerTrigger>
         <div className="w-[139px] cursor-pointer group">
           {/* img */}
-          {type === "Other Processed Foods"
-            ? (
-              <div className='w-[139px] h-[139px] bg-gray-400 rounded-md flex justify-center items-center'>
-                준비중
-              </div>
-            ) : (
-              <Image
-                src={FOOD_IMAGES_MAP[type]}
-                alt="food_img"
-                className="group-hover:border border-black rounded-md"
-              />
-            )}
+          {type === 'Other Processed Foods' ? (
+            <div className="w-[139px] h-[139px] bg-gray-400 rounded-md flex justify-center items-center">
+              준비중
+            </div>
+          ) : (
+            <Image
+              src={FOOD_IMAGES_MAP[type]}
+              alt="food_img"
+              className="group-hover:border border-black rounded-md"
+            />
+          )}
           {/* name */}
           <h3 className="text-lg font-semibold">{name}</h3>
           {/* description */}
@@ -92,25 +104,24 @@ export default function Food({
         </DrawerHeader>
         <div className="flex flex-col gap-[16px] px-[16px] max-h-[440px] overflow-y-scroll">
           <div className="flex justify-center">
-            {type === "Other Processed Foods"
-              ? (
-                <div className='w-[50%] bg-gray-400'></div>
-              ) : (
-                <Image
-                  src={FOOD_IMAGES_MAP[type]}
-                  alt="food_img"
-                  className="w-[50%]"
-                />
-              )}
+            {type === 'Other Processed Foods' ? (
+              <div className="w-[50%] bg-gray-400"></div>
+            ) : (
+              <Image
+                src={FOOD_IMAGES_MAP[type]}
+                alt="food_img"
+                className="w-[50%]"
+              />
+            )}
           </div>
           <p className="text-sm leading-7 line-clamp-2">{description}</p>
           <div>
             <h1>영양 정보</h1>
-            <p className="text-sm leading-7">{nutrition}</p>
+            <p className="text-sm leading-7">{nutritionInfo}</p>
           </div>
           <div>
             <h1>보관 방법</h1>
-            <p className="text-sm leading-7">{storage}</p>
+            <p className="text-sm leading-7">{storageInfo}</p>
           </div>
         </div>
         <DrawerFooter>
