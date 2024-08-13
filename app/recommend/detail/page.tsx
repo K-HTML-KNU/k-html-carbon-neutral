@@ -1,6 +1,7 @@
 'use client'
 
 import { CheckBoxForm } from '@/components/InputForm'
+import Loading from '@/components/Loading'
 import StarRate from '@/components/Star'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,12 +21,15 @@ import { initRecipData, recipeLevel, RecommendRecipeType } from '@/models/recipe
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { set, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const RecommendDetailPage = () => {
 
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
   const [responseRecipeData, setResponseRecipeData] = useState<RecommendRecipeType>(initRecipData);
 
   useEffect(() => {
@@ -92,20 +96,28 @@ const RecommendDetailPage = () => {
   }
 
   const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const response = await fetch('/api/recipe/review', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: session?.user?.email,
-        review: form.getValues().review,
-        leftIngredients: getTrueKeys(form.getValues()).join(','),
-        recipe_name: responseRecipeData.recipe_name,
-      }),
-    })
-    const data = await response.json()
-    console.log(data)
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/recipe/review', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: session?.user?.email,
+          review: form.getValues().review,
+          leftIngredients: getTrueKeys(form.getValues()).join(','),
+          recipe_name: responseRecipeData.recipe_name,
+        }),
+      })
+      const data = await response.json()
+      console.log(data)
+      setIsLoading(false)
+      router.push('/fridge/')
+    } catch (error) {
+      console.error('Error:', error)
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -148,7 +160,7 @@ const RecommendDetailPage = () => {
                   <div key={index}>
                     <p className='text-lg'>{index + 1}. {step.subtitle}</p>
                     <div className='flex'>
-                      {step.image.startsWith('https://www.example.com/')
+                      {step.image.includes('example')
                         ? (
                           <div></div>
                         )
@@ -221,6 +233,7 @@ const RecommendDetailPage = () => {
           </div>
         )}
       </ScrollArea>
+      <Loading isOpen={isLoading} />
     </div >
   )
 }

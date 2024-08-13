@@ -2,6 +2,7 @@
 
 import CreateIngredient from '@/components/CreateIngredient'
 import Food, { FoodType } from '@/components/Food'
+import Loading from '@/components/Loading';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
@@ -31,7 +32,8 @@ export type IngredientList = {
 }[]
 
 export default function Fridge() {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [ingredients, setIngredients] = useState<IngredientList>([]);
 
@@ -43,20 +45,30 @@ export default function Fridge() {
       window.location.href = '/auth/login';
       return;
     }
-    const response = await fetch(`/api/ingredient/get`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: session?.user?.email,
-      }),
-    })
 
-    const data = await response.json();
+    setIsLoading(true);
 
-    setIngredients(data.response);
-    console.log(data);
+    try {
+      const response = await fetch(`/api/ingredient/get`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: session?.user?.email,
+        }),
+      })
+
+      const data = await response.json();
+
+      setIngredients(data.response);
+      console.log(data);
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -78,13 +90,7 @@ export default function Fridge() {
           storage={ingredients.storage_method}
         />
       ))}
-      {/* <Food
-        type="egg"
-        name="계란"
-        description="달걀은 단백질이 풍부하고, 지방과 콜레스테롤 함량이 낮아서 건강에 좋은 식품입니다."
-        nutrition="굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양"
-        storage="잘 저장 잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장"
-      /> */}
+      <Loading isOpen={isLoading} />
     </div>
   )
 }
