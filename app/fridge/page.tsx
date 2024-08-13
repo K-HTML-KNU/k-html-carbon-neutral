@@ -32,6 +32,7 @@ type IngredientList = {
 
 export default function Fridge() {
   const { data: session } = useSession()
+
   const [ingredients, setIngredients] = useState<IngredientList>([]);
 
   const handleGetIngredients = async () => {
@@ -39,6 +40,7 @@ export default function Fridge() {
     console.log(email);
     if (!email) {
       alert('로그인이 필요합니다.');
+      window.location.href = '/auth/login';
       return;
     }
     const response = await fetch(`/api/ingredient/get`, {
