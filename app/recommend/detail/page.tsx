@@ -18,11 +18,13 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { toast } from '@/components/ui/use-toast'
 import { recipeLevel, responseRecipeData } from '@/models/recipe'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-const page = () => {
+const Page = () => {
+  const { data: session } = useSession()
   const generateDynamicSchema = (fields: string[]) => {
     const schema = fields.reduce((acc, field) => {
       return {
@@ -61,7 +63,7 @@ const page = () => {
     defaultValues,
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmitReview(data: z.infer<typeof FormSchema>) {
     console.log('동작하지 않음; onclick을 처리')
     toast({
       title: 'You submitted the following values:',
@@ -73,54 +75,71 @@ const page = () => {
     })
   }
 
+  function getTrueKeys(obj: { [key: string]: boolean | number }): string[] {
+    return Object.keys(obj).filter(
+      (key) => typeof obj[key] === 'boolean' && obj[key] === true,
+    )
+  }
+
+  const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const response = await fetch('/api/recipe/review', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: session?.user?.email,
+        review: form.getValues().review,
+        leftIngredients: getTrueKeys(form.getValues()).join(','),
+        recipe_name: responseRecipeData.recipe_name,
+      }),
+    })
+    const data = await response.json()
+    console.log(data)
+  }
+
   return (
     <div className="">
       <ScrollArea>
-        <div className='mb-4'>
-          <h1 className='text-2xl font-bold'>{responseRecipeData.recipe_name}</h1>
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>레시피 재료</h1>
-          <p>[ {responseRecipeData.ingredient} ]</p>
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>식사량(인원수)</h1>
-          <p>{responseRecipeData.serving}인분</p>
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>요리 난이도</h1>
-          <p>{recipeLevel[responseRecipeData.difficulty].label}</p>
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>요리 시간</h1>
-          <p>{responseRecipeData.cooking_time}분 소요</p>
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>요리 순서(목차)</h1>
+        <h1>{responseRecipeData.recipe_name}</h1>
+        <h1>레시피 재료</h1>
+        <p>[ {responseRecipeData.ingredient} ]</p>
+        {/* <div className="flex">
+        {responseRecipeData.ingredient.split(',').map((ingredient) => (
+          <p>{ingredient}</p>
+        ))}
+      </div> */}
 
-          {responseRecipeData.steps.map((step, index) => (
-            <p key={index}>{index + 1}. {step.subtitle}</p>
-          ))}
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>레시피 세부 내용</h1>
-          {responseRecipeData.steps.map((step, index) => (
-            <div key={index}>
-              <p className='text-lg'>{index + 1}. {step.subtitle}</p>
-              <div className='flex'>
-                <Image
-                  src={step.image}
-                  alt={step.description + '이미지'}
-                  width={500}
-                  height={300}
-                  className="w-full h-auto rounded-xl"
-                // layout="responsive"
-                />
-                <p className='text-base'>{step.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <h1>{responseRecipeData.serving}인분</h1>
+        <h1>요리 난이도</h1>
+        <p>{recipeLevel[responseRecipeData.difficulty].label}</p>
+
+        <h1>요리 시간</h1>
+        <p>{responseRecipeData.cooking_time}분 소요</p>
+
+        <h1>요리 순서(목차)</h1>
+        {responseRecipeData.steps.map((step, index) => (
+          <p key={index}>{step.subtitle}</p>
+        ))}
+
+        <h1>레시피 세부 내용</h1>
+        {responseRecipeData.steps.map((step, index) => (
+          <div key={index}>
+            <p>
+              {step.step} / {responseRecipeData.steps.length}
+            </p>
+            <p>{step.subtitle}</p>
+            <p>{step.description}</p>
+            <Image
+              src={step.image}
+              alt={step.description + '이미지'}
+              width={500}
+              height={300}
+              className="w-full h-auto rounded-xl"
+              // layout="responsive"
+            />
+          </div>
+        ))}
 
         <Drawer>
           <DrawerTrigger asChild className="flex flex-1 w-full mt-12">
@@ -128,7 +147,7 @@ const page = () => {
           </DrawerTrigger>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmitReview)}>
               <DrawerContent>
                 <DrawerHeader className="text-left gap-4">
                   <DrawerTitle>레시피 리뷰</DrawerTitle>
@@ -161,13 +180,7 @@ const page = () => {
                     <Button variant="outline">취소하기</Button>
                   </DrawerClose>
                   <DrawerClose asChild className="flex-1">
-                    <Button
-                      className="flex-1"
-                      type="submit"
-                      onClick={() => {
-                        console.log(form.getValues())
-                      }}
-                    >
+                    <Button className="flex-1" type="submit" onClick={onClick}>
                       평가하기
                     </Button>
                   </DrawerClose>
@@ -181,4 +194,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
