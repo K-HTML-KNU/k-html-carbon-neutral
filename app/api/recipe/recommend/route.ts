@@ -1,28 +1,22 @@
-// app/api/ingredient/add/route.ts
 import { NextResponse } from 'next/server'
 import { prisma } from '@/prisma/prisma'
-
-function parseToArray(input: any): any[] {
-  if (Array.isArray(input)) {
-    return input
-  }
-  return []
-}
 
 const apiKey = process.env.NEXT_PUBLIC_OPENAI_KEY
 export async function POST(request: Request) {
   try {
-    // const { email, ingredientName } = await request.json()
+    const { ingredients } = await request.json()
+    // const ingredients = ['달걀']
     if (!apiKey) {
       console.error('API Key is missing')
       return NextResponse.json({ error: 'API Key is missing' }, { status: 500 })
     }
 
-    const ingrident = ['달걀']
-      .map((ingredient_item) => `"${ingredient_item}", `)
-      .join(', ')
-
-    const ingredientJson = JSON.stringify([{ name: ingrident }])
+    let ingredient = ''
+    for (let i = 0; i < ingredients.length; i++) {
+      ingredient += `"${ingredients[i]}", `
+    }
+    ingredient = ingredient.slice(0, -2)
+    ingredient = `[${ingredient}]`
 
     const recipes: any[] = await prisma.$queryRaw`
   SELECT 
@@ -44,7 +38,7 @@ export async function POST(request: Request) {
   FROM 
     recipes 
   WHERE 
-    ingredients->'재료' @> '["달걀"]'::jsonb 
+    ingredients->'재료' @> ${ingredient}::jsonb 
   ORDER BY 
     priority_score DESC 
   LIMIT 5;
@@ -98,9 +92,12 @@ export async function POST(request: Request) {
     })
     const data = await response.json()
     const json_str = data['choices'][0]['message']['content']
-    const json = JSON.parse(JSON.stringify(json_str))
-
-    const steps: any[] = parseToArray(json['steps'])
+    const cleanJsonStr = json_str
+      .replace(/'/g, '"') // 작은 따옴표를 큰 따옴표로 변경
+      .replace(/(\d+):/g, '"$1":') // 키값을 문자열로 변환
+      .replace(/,\s*}/g, '}') // 잘못된 쉼표 제거
+    const json = JSON.parse(cleanJsonStr)
+    const steps = json['steps']
 
     for (let i = 0; i < steps.length; i++) {
       try {
@@ -111,7 +108,6 @@ export async function POST(request: Request) {
         continue
       }
     }
-
     return NextResponse.json(
       {
         message: 'Ingredient added to user successfully',
