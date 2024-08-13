@@ -78,6 +78,26 @@ export default function Recommend() {
     toast({
       title: '레시피를 생성하고 있습니다.',
     })
+
+    // try {
+    //   const response = await fetch('/api/recommand-recipe', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(postData),
+    //   })
+
+    //   if (!response.ok) {
+    //     throw new Error('Failed to send POST request')
+    //   }
+
+    //   const data = await response.json()
+    //   console.log('Response:', data)
+    // } catch (error) {
+    //   console.error('Error:', error)
+    // }
+
     router.push('/recommend/detail')
   }
 
