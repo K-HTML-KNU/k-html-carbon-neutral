@@ -1,0 +1,50 @@
+CREATE TABLE "IngredientCategory" (
+    "id" SERIAL PRIMARY KEY,
+    "name" VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE "User" (
+    "id" SERIAL PRIMARY KEY,
+    "carbon_reduce" INT DEFAULT 0,
+    "email" VARCHAR(255) NOT NULL UNIQUE,
+    "name" VARCHAR(255) NOT NULL,
+    "password" VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE "Ingredients" (
+    "id" SERIAL PRIMARY KEY,
+    "name" VARCHAR(255) NOT NULL,
+    "nutrition_info" TEXT,
+    "storage_method" VARCHAR(255),
+    "disposal_method" VARCHAR(255),
+    "category_id" INT,
+    FOREIGN KEY ("category_id") REFERENCES "IngredientCategory"("id")
+);
+
+CREATE TABLE "RecipeHistory" (
+    "id" SERIAL PRIMARY KEY,
+    "name" VARCHAR(255) NOT NULL,
+    "nutrition_info" TEXT NOT NULL,
+    "review" INT NOT NULL,
+    "user_id" INT,
+    FOREIGN KEY ("user_id") REFERENCES "User"("id")
+);
+
+CREATE TABLE "RecipeHistoryIngredients" (
+    "id" SERIAL PRIMARY KEY,
+    "ingredients_id" INT,
+    "recipe_history_id" INT,
+    FOREIGN KEY ("ingredients_id") REFERENCES "Ingredients"("id"),
+    FOREIGN KEY ("recipe_history_id") REFERENCES "RecipeHistory"("id")
+);
+
+CREATE TABLE "UserIngredients" (
+    "id" SERIAL PRIMARY KEY,
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "ingredients_id" INT,
+    "user_id" INT,
+    FOREIGN KEY ("ingredients_id") REFERENCES "Ingredients"("id"),
+    FOREIGN KEY ("user_id") REFERENCES "User"("id")
+);
+

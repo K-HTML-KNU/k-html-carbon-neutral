@@ -49,6 +49,8 @@ model RecipeHistoryIngredients {
 
 model UserIngredients {
   id             Int         @id @default(autoincrement())
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
   ingredients    Ingredients @relation(fields: [ingredients_id], references: [id])
   ingredients_id Int
   user           User        @relation(fields: [user_id], references: [id])
@@ -60,3 +62,5 @@ model IngredientCategory {
   name        String
   ingredients Ingredients[]
 }
+
+
