@@ -22,7 +22,7 @@ export default function RootLayout({
       <body>
         <div className='max-w-[640px] mx-auto my-0 w-[100%] box-content min-h-[100vh] flex flex-col'>
           <Header />
-          <main className="px-[16px] py-[16px] my-[12px] flex-1">
+          <main className="px-[16px] py-[16px] my-[12px] flex-1 border border-red-500">
             <AuthContext>{children}</AuthContext>
             <Toaster />
           </main>
