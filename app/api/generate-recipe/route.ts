@@ -1,16 +1,127 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/prisma/prisma'
 
+function filterVeganIngredients(ingredients: string[]): string[] {
+  const vegan_mask: string[] = [
+    '소고기',
+    '돼지고기',
+    '닭고기',
+    '양고기',
+    '오리고기',
+    '거위고기',
+    '사슴고기',
+    '칠면조고기',
+    '말고기',
+    '토끼고기',
+    '염소고기',
+    '캥거루고기',
+    '참치',
+    '연어',
+    '고등어',
+    '청어',
+    '명태',
+    '대구',
+    '새우',
+    '랍스터',
+    '게',
+    '조개',
+    '굴',
+    '전복',
+    '바지락',
+    '오징어',
+    '문어',
+    '가리비',
+    '성게',
+    '해삼',
+    '상어지느러미',
+    '어란',
+    '캐비어',
+    '알류',
+    '달걀',
+    '우유',
+    '치즈',
+    '요거트',
+    '버터',
+    '생크림',
+    '연유',
+    '아이스크림',
+    '크림치즈',
+    '사워크림',
+    '마요네즈',
+    '꿀',
+    '젤라틴',
+    '카라멜색소',
+    '코치닐',
+    '이즈잉글라스',
+    '젓갈',
+    '액젓',
+    '어묵',
+    '명란젓',
+    '밴댕이젓',
+    '새우젓',
+    '된장',
+    '간장',
+    '참기름',
+    '고추기름',
+    '굴소스',
+    '오일류',
+    '멸치',
+    '한치',
+    '꼴뚜기',
+    '곱창',
+    '소시지',
+    '베이컨',
+    '햄',
+    '살라미',
+    '페퍼로니',
+    '파르마산 치즈',
+    '리코타 치즈',
+    '모짜렐라 치즈',
+    '고르곤졸라 치즈',
+    '까망베르 치즈',
+    '브리 치즈',
+    '프로볼로네 치즈',
+    '에멘탈 치즈',
+    '하바티 치즈',
+    '체다 치즈',
+    '페타 치즈',
+    '로마노 치즈',
+    '파머산 치즈',
+    '슈라우트',
+    '곤약젤리',
+    '칵테일 소시지',
+    '비엔나 소시지',
+    '육포',
+    '참기름',
+    '들기름',
+    '유자차',
+    '조미료',
+    '치킨스톡',
+    '소고기스톡',
+    '돼지기름',
+    '라드',
+    '마가린',
+    '포도씨유',
+  ]
+
+  return ingredients.filter((ingredient) => !vegan_mask.includes(ingredient))
+}
+
 const apiKey = process.env.NEXT_PUBLIC_OPENAI_KEY
 export async function POST(request: Request) {
   try {
-    const { ingredients } = await request.json()
+    const requestData = await request.json()
     // const ingredients = ['달걀']
+    let ingredients = requestData.ingredients
+    const isVegan = requestData.isVegan
     if (!apiKey) {
       console.error('API Key is missing')
       return NextResponse.json({ error: 'API Key is missing' }, { status: 500 })
     }
 
+    if (isVegan) {
+      ingredients = filterVeganIngredients(ingredients)
+    }
     let ingredient = ''
     for (let i = 0; i < ingredients.length; i++) {
       ingredient += `"${ingredients[i]}", `
@@ -63,7 +174,7 @@ export async function POST(request: Request) {
     const prompt_data = JSON.stringify(recipes, null)
     let prompt = `
       다음은 ${'달걀'}을 이용해 만들 수 있는 요리 레시피 ${recipes.length}개이다.\n\n${prompt_data}\n
-      참고:\n- view_count: 조회수(12 ~ 15192, mean: 6291)\n- scrap_count: 스크랩 횟수(116 ~ 462, mean: 145)\n- difficulty: 난이도(category: 1 ~ 5, 값이 클수록 어렵다)\n- cooking_time: 요리시간(분: 5 ~ 120, mean: 43)\n
+      참고:\n- view_count: 조회수(12 ~ 15192, mean: 6291)\n- scrap_count: 스크랩 횟수(116 ~ 462, mean: 145)\n- difficulty: 난이도(category: 1 ~ 5, 값이 클수록 어렵다)\n- cooking_time: 요리시간(분: 5 ~ 120, mean: 43), ${isVegan ? '사용자는 비건임으로 비건 음식을 추천해야 한다.' : ''}\n
       위 레시피를 기반으로 ${'달걀'}을 이용해 만들 수 있는 가장 적절한 레시피를 다음 규칙을 지켜 작성하여라.\n1. 어느 한 레시피만을 사용하지 말아라. 2개 이상의 레시피를 사용하여라.\n2. 작성된 레시피에서 사용된 재료들은 모두 ingredients에 명시하여라.\n3. "반드시" 아래와 같은 JSON 형식으로 작성하여라. \n{\n  'recipe_name': "간장계란밥",\n 'ingredient': "밥, 계란, 간장, 김치, 미역, 참기름",\n serving: 2,\n  'difficulty': 2,\n 'cooking_time': 30,\n  'steps': [\n  {\n 'step': 1,\n'subtitle': "계란 풀기"\n 'image': "[623561-1]",\n 'description': "밥을 넣고 계란을 풀어주세요."\n }\n  ]\n}`
 
     const apiUrl =
