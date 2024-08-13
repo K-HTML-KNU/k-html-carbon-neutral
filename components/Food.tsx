@@ -23,31 +23,44 @@ import Oil from '@/meta/images/food/oil.png'
 import { Button } from './ui/button'
 
 export type FoodType =
-  "Default category" |
-  "Grains and Starches" |
-  "Vegetables" |
-  "Fruits" |
-  "Meat" |
-  "Seafood" |
-  "Dairy and Eggs" |
-  "Legumes and Nuts" |
-  "Condiments and Spices" |
-  "Fats and Oils" |
-  "Other Processed Foods";
+  | 'Default category'
+  | 'Grains and Starches'
+  | 'Vegetables'
+  | 'Fruits'
+  | 'Meat'
+  | 'Seafood'
+  | 'Dairy and Eggs'
+  | 'Legumes and Nuts'
+  | 'Condiments and Spices'
+  | 'Fats and Oils'
+  | 'Other Processed Foods'
 
 const FOOD_IMAGES_MAP: { [key: string]: StaticImageData } = {
-  "Dairy and Eggs": EGG,
-  "Fruits": FRUIT,
-  "Grains and Starches": GRAIN,
-  "Legumes and Nuts": LEGUME,
-  "Meat": MEET,
-  "Condiments and Spices": SALT,
-  "Seafood": SEAFOOD,
-  "Vegetables": VEGETABLE,
-  "Fats and Oils": Oil
+  'Dairy and Eggs': EGG,
+  Fruits: FRUIT,
+  'Grains and Starches': GRAIN,
+  'Legumes and Nuts': LEGUME,
+  Meat: MEET,
+  'Condiments and Spices': SALT,
+  Seafood: SEAFOOD,
+  Vegetables: VEGETABLE,
+  'Fats and Oils': Oil,
 }
 
-export default function Food({
+async function getRecommendRecipe(foodName: string) {
+  const response = await fetch(
+    'https://vwekbsqcaf.execute-api.ap-northeast-2.amazonaws.com/default/Openai-Food-HelloWorldFunction-X8zN5be3fV7J',
+    {
+      method: 'POST',
+      body: JSON.stringify({ ingredient_name: foodName }),
+    },
+  )
+  const data = await response.json()
+  console.log('foodData', data)
+  return data
+}
+
+export default async function Food({
   type,
   name,
   description,
@@ -60,7 +73,11 @@ export default function Food({
   nutrition: string
   storage: string
 }) {
-
+  const data = getRecommendRecipe(name)
+  // @ts-ignore
+  const nutritionInfo = JSON.stringify(data['nutritionInfo'])
+  // @ts-ignore
+  const storageInfo = data['storageMethod']
   return (
     <Drawer>
       <DrawerTrigger>
@@ -95,11 +112,11 @@ export default function Food({
           <p className="text-sm leading-7 line-clamp-2">{description}</p>
           <div>
             <h1>영양 정보</h1>
-            <p className="text-sm leading-7">{nutrition}</p>
+            <p className="text-sm leading-7">{nutritionInfo}</p>
           </div>
           <div>
             <h1>보관 방법</h1>
-            <p className="text-sm leading-7">{storage}</p>
+            <p className="text-sm leading-7">{storageInfo}</p>
           </div>
         </div>
         <DrawerFooter>

@@ -1,68 +1,78 @@
-'use client'
-
 import Food from '@/components/Food'
 import { Card } from '@/components/ui/card'
+import { prisma } from '@/prisma/prisma'
+import { getServerSession } from 'next-auth'
 import { useEffect } from 'react'
 
-export default function Home() {
-  useEffect(() => {
-    const postData = {
-      recipeHistory: [
-        {
-          recipeName: '스파게티 봉즈라노',
-          recipeIngredients: ['스파게티', '스파게티 소스', '올리브 오일'],
-          review: 5,
-        },
-        {
-          recipeName: '치킨 커리',
-          recipeIngredients: [
-            '닭고기',
-            '토마토',
-            '양파',
-            '마늘',
-            '쌀',
-            '카레 가루',
-          ],
-          review: 4,
-        },
-      ],
-      ingredients: [
-        '달걀',
-        '밥',
-        '닭고기',
-        '소금',
-        '후추',
-        '간장',
-        '참기름',
-        '김치',
-        '냉동 밥',
-        '미역',
-      ],
+async function getRecommendRecipe() {
+  const session = await getServerSession()
+  console.log(session)
+  try {
+    if (!session) {
+      return
     }
-
-    const sendPostRequest = async () => {
-      try {
-        const response = await fetch('/api/recommand-recipe', {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: session?.user?.email || '',
+      },
+    })
+    if (!user) {
+      return
+    }
+    const recipeHistories = await prisma.recipeHistory.findMany({
+      orderBy: {
+        review: 'desc',
+      },
+      select: {
+        name: true,
+        review: true,
+      },
+      take: 5,
+    })
+    const userIngredients = await prisma.userIngredients.findMany({
+      where: {
+        user_id: user.id,
+      },
+      include: {
+        ingredients: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    })
+    console.log('user:', user)
+    console.log('recipeHistories:', recipeHistories)
+    console.log('userIngredients:', userIngredients)
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_HOST}/api/recommand-recipe`,
+        {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(postData),
-        })
+          body: JSON.stringify({ recipeHistories }),
+        },
+      )
 
-        if (!response.ok) {
-          throw new Error('Failed to send POST request')
-        }
-
-        const data = await response.json()
-        console.log('Response:', data)
-      } catch (error) {
-        console.error('Error:', error)
+      if (!response.ok) {
+        throw new Error('Failed to send POST request')
       }
-    }
 
-    sendPostRequest()
-  }, [])
+      const data = await response.json()
+      console.log('Response:', data)
+    } catch (error) {
+      console.error('Error:', error)
+    }
+    return { recipeHistories, userIngredients }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export default async function Home() {
+  const postData = await getRecommendRecipe()
 
   return (
     <div>
