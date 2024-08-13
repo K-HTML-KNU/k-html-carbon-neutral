@@ -43,11 +43,11 @@ export async function POST(request: Request) {
         ],
       }),
     })
-
-    console.log('response', response)
+    const data = await response.json()
+    console.log('response', data)
 
     return NextResponse.json(
-      { message: 'Ingredient added to user successfully', response: response },
+      { message: 'Ingredient added to user successfully', data: data },
       { status: 200 },
     )
   } catch (error) {
