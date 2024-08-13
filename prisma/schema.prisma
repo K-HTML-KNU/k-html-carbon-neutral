@@ -12,6 +12,7 @@ model User {
   carbon_reduce   Int               @default(0)
   email           String            @unique
   name            String
+  password        String
   UserIngredients UserIngredients[]
   recipeHistory   RecipeHistory[]   @relation("UserRecipeHistory")
 }
