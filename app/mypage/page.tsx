@@ -65,12 +65,10 @@ export default function Mypage() {
           </div>
         </>
 
-        <div>
+        <>
           <h1 className="font-semibold text-lg">Updated At</h1>
-          <p className="text-slate-600">
-            Developed At 2024.08.14(Wed) AM 06:00
-          </p>
-        </div>
+          <p className="text-slate-600">Updated At 2024.08.14(Wed) AM 06:00</p>
+        </>
       </div>
 
       <Button className="mt-12" variant="destructive">
