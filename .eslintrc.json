@@ -1,7 +1,12 @@
 {
   "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
     "@titicaca/eslint-config-triple",
     "@titicaca/eslint-config-triple/requiring-type-checking",
     "@titicaca/eslint-config-triple/prettier"
-  ]
+  ],
+  "rules": {
+    "no-console": "warn" /* "error" -> "off"로 변경 */
+  }
 }
