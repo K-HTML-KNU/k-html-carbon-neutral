@@ -19,7 +19,7 @@ const idToCategory: { [key: number]: string } = {
   11: "Other Processed Foods",
 }
 
-type IngredientList = {
+export type IngredientList = {
   ingredients: {
     category_id: number,
     disposal_method: string,
@@ -67,7 +67,7 @@ export default function Fridge() {
 
   return (
     <div className="flex flex-wrap gap-[12px]">
-      <CreateIngredient />
+      <CreateIngredient setIngredients={setIngredients} />
       {ingredients?.map(({ ingredients }, index) => (
         <Food
           key={`ingredient-${index}`}

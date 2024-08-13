@@ -16,13 +16,26 @@ import {
 import { Form } from '@/components/ui/form'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { toast } from '@/components/ui/use-toast'
-import { recipeLevel, responseRecipeData } from '@/models/recipe'
+import { initRecipData, recipeLevel, RecommendRecipeType } from '@/models/recipe'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-const page = () => {
+const RecommendDetailPage = () => {
+
+  const [responseRecipeData, setResponseRecipeData] = useState<RecommendRecipeType>(initRecipData);
+
+  useEffect(() => {
+    const data = window.localStorage.getItem('recipe');
+    if (!data) {
+      return;
+    }
+    console.log(JSON.parse(data))
+    setResponseRecipeData(JSON.parse(data));
+  }, []);
+
   const generateDynamicSchema = (fields: string[]) => {
     const schema = fields.reduce((acc, field) => {
       return {
@@ -40,15 +53,11 @@ const page = () => {
     })
   }
 
-  const ingredientArray = responseRecipeData.ingredient
-    .split(',')
-    .map((item) => item.trim())
-
-  const FormSchema = generateDynamicSchema(ingredientArray)
+  const FormSchema = generateDynamicSchema(responseRecipeData.ingredient)
 
   const defaultValues = {
     review: 5,
-    ...ingredientArray.reduce((acc, field) => {
+    ...responseRecipeData.ingredient.reduce((acc, field) => {
       return {
         ...acc,
         [field]: false, // 각 필드에 대해 기본 값을 false로 설정
@@ -76,109 +85,124 @@ const page = () => {
   return (
     <div className="">
       <ScrollArea>
-        <div className='mb-4'>
-          <h1 className='text-2xl font-bold'>{responseRecipeData.recipe_name}</h1>
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>레시피 재료</h1>
-          <p>[ {responseRecipeData.ingredient} ]</p>
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>식사량(인원수)</h1>
-          <p>{responseRecipeData.serving}인분</p>
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>요리 난이도</h1>
-          <p>{recipeLevel[responseRecipeData.difficulty].label}</p>
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>요리 시간</h1>
-          <p>{responseRecipeData.cooking_time}분 소요</p>
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>요리 순서(목차)</h1>
-
-          {responseRecipeData.steps.map((step, index) => (
-            <p key={index}>{index + 1}. {step.subtitle}</p>
-          ))}
-        </div>
-        <div className='mb-4'>
-          <h1 className='text-xl font-semibold'>레시피 세부 내용</h1>
-          {responseRecipeData.steps.map((step, index) => (
-            <div key={index}>
-              <p className='text-lg'>{index + 1}. {step.subtitle}</p>
-              <div className='flex'>
-                <Image
-                  src={step.image}
-                  alt={step.description + '이미지'}
-                  width={500}
-                  height={300}
-                  className="w-full h-auto rounded-xl"
-                // layout="responsive"
-                />
-                <p className='text-base'>{step.description}</p>
-              </div>
+        {responseRecipeData && (
+          <div>
+            <div className='mb-4'>
+              <h1 className='text-2xl font-bold'>{responseRecipeData.recipe_name}</h1>
             </div>
-          ))}
-        </div>
+            <div className='mb-4'>
+              <h1 className='text-xl font-semibold'>레시피 재료</h1>
+              {responseRecipeData.ingredient.map((ingredient, index) => (
+                <span key={index}>[{ingredient}] </span>
+              ))}
+            </div>
+            <div className='mb-4'>
+              <h1 className='text-xl font-semibold'>식사량(인원수)</h1>
+              <p>{responseRecipeData.serving}인분</p>
+            </div>
+            <div className='mb-4'>
+              <h1 className='text-xl font-semibold'>요리 난이도</h1>
+              <p>{recipeLevel[responseRecipeData.difficulty].label}</p>
+            </div>
+            <div className='mb-4'>
+              <h1 className='text-xl font-semibold'>요리 시간</h1>
+              <p>{responseRecipeData.cooking_time}분 소요</p>
+            </div>
+            <div className='mb-4'>
+              <h1 className='text-xl font-semibold'>요리 순서(목차)</h1>
 
-        <Drawer>
-          <DrawerTrigger asChild className="flex flex-1 w-full mt-12">
-            <Button>레시피 평가하기</Button>
-          </DrawerTrigger>
-
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <DrawerContent>
-                <DrawerHeader className="text-left gap-4">
-                  <DrawerTitle>레시피 리뷰</DrawerTitle>
-                  <DrawerDescription>
-                    레시피를 평가해주세요. 더 나은 레시피 추천하는데 반영됩니다.
-                  </DrawerDescription>
-
-                  <div>
-                    <h1>레시피 별점</h1>
-                    <div className="flex justify-center">
-                      <StarRate form={form}></StarRate>
+              {responseRecipeData.steps.map((step, index) => (
+                <p key={index}>{index + 1}. {step.subtitle}</p>
+              ))}
+            </div>
+            <div className='mb-4'>
+              <h1 className='text-xl font-semibold'>레시피 세부 내용</h1>
+              <div className='flex flex-col gap-[12px]'>
+                {responseRecipeData.steps.map((step, index) => (
+                  <div key={index}>
+                    <p className='text-lg'>{index + 1}. {step.subtitle}</p>
+                    <div className='flex'>
+                      {step.image.startsWith('https://www.example.com/')
+                        ? (
+                          <div></div>
+                        )
+                        : (
+                          <Image
+                            src={step.image}
+                            alt={step.description + '이미지'}
+                            width={500}
+                            height={300}
+                            className="w-full h-auto rounded-xl"
+                          // layout="responsive"
+                          />
+                        )
+                      }
+                      <p className='text-sm'>{step.description}</p>
                     </div>
                   </div>
+                ))}
+              </div>
+            </div>
 
-                  <div className="block">
-                    <h1>남은 식재료</h1>
-                    {ingredientArray.map((ingrediment, index) => (
-                      <CheckBoxForm
-                        key={index}
-                        form={form}
-                        name={ingrediment}
-                        label={ingrediment}
-                      />
-                    ))}
-                  </div>
-                </DrawerHeader>
+            <Drawer>
+              <DrawerTrigger asChild className="flex flex-1 w-full mt-12">
+                <Button>레시피 평가하기</Button>
+              </DrawerTrigger>
 
-                <DrawerFooter className="pt-2 flex flex-row">
-                  <DrawerClose asChild className="flex-1">
-                    <Button variant="outline">취소하기</Button>
-                  </DrawerClose>
-                  <DrawerClose asChild className="flex-1">
-                    <Button
-                      className="flex-1"
-                      type="submit"
-                      onClick={() => {
-                        console.log(form.getValues())
-                      }}
-                    >
-                      평가하기
-                    </Button>
-                  </DrawerClose>
-                </DrawerFooter>
-              </DrawerContent>
-            </form>
-          </Form>
-        </Drawer>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                  <DrawerContent>
+                    <DrawerHeader className="text-left gap-4">
+                      <DrawerTitle>레시피 리뷰</DrawerTitle>
+                      <DrawerDescription>
+                        레시피를 평가해주세요. 더 나은 레시피 추천하는데 반영됩니다.
+                      </DrawerDescription>
+
+                      <div>
+                        <h1>레시피 별점</h1>
+                        <div className="flex justify-center">
+                          <StarRate form={form}></StarRate>
+                        </div>
+                      </div>
+
+                      <div className="block">
+                        <h1>남은 식재료</h1>
+                        {responseRecipeData.ingredient.map((ingrediment, index) => (
+                          <CheckBoxForm
+                            key={index}
+                            form={form}
+                            name={ingrediment}
+                            label={ingrediment}
+                          />
+                        ))}
+                      </div>
+                    </DrawerHeader>
+
+                    <DrawerFooter className="pt-2 flex flex-row">
+                      <DrawerClose asChild className="flex-1">
+                        <Button variant="outline">취소하기</Button>
+                      </DrawerClose>
+                      <DrawerClose asChild className="flex-1">
+                        <Button
+                          className="flex-1"
+                          type="submit"
+                          onClick={() => {
+                            console.log(form.getValues())
+                          }}
+                        >
+                          평가하기
+                        </Button>
+                      </DrawerClose>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </form>
+              </Form>
+            </Drawer>
+          </div>
+        )}
       </ScrollArea>
     </div>
   )
 }
 
-export default page
+export default RecommendDetailPage

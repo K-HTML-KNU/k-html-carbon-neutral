@@ -72,42 +72,13 @@ export default function Recommend() {
     form.setValue('ingredients', updatedIngredients)
   }
 
-  const onSubmit = () => {
-    const formData = form.getValues()
-    console.log('Form Data:', formData.toString())
-    toast({
-      title: '레시피를 생성하고 있습니다.',
-    })
-
-    // try {
-    //   const response = await fetch('/api/recommand-recipe', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(postData),
-    //   })
-
-    //   if (!response.ok) {
-    //     throw new Error('Failed to send POST request')
-    //   }
-
-    //   const data = await response.json()
-    //   console.log('Response:', data)
-    // } catch (error) {
-    //   console.error('Error:', error)
-    // }
-
-    router.push('/recommend/detail')
-  }
-
-  const handleRecommendRecipe = async () => {
+  const onSubmit = async () => {
     const ingredients = form.getValues('ingredients') || [];
     const carbornNetural = form.getValues('carbornNetural');
 
-    if (ingredients.length == 0) {
-      return;
-    }
+    toast({
+      title: '레시피를 생성하고 있습니다.',
+    })
 
     console.log(ingredients, carbornNetural);
 
@@ -124,6 +95,9 @@ export default function Recommend() {
 
     const data = await response.json();
     console.log(data);
+
+    window.localStorage.setItem('recipe', JSON.stringify(data.data));
+    router.push('/recommend/detail');
   }
 
   return (
@@ -202,7 +176,7 @@ export default function Recommend() {
 
         <div className="flex gap-4 pt-4">
           <Camera initOpen={true} initIngredients={initIngredient} />
-          <Button className="w-full" type="submit" onClick={handleRecommendRecipe}>
+          <Button className="w-full" type="submit">
             레시피 생성하기
           </Button>
         </div>
