@@ -183,7 +183,7 @@ export default function Camera() {
   }
 
   const handleSubmit = async () => {
-    const response = await fetch('image/MemoryTest-YOLOFunction-EoPm6OiUbjtx', {
+    const response = await fetch('https://lh6ujwj0tj.execute-api.ap-northeast-2.amazonaws.com/image/MemoryTest-YOLOFunction-EoPm6OiUbjtx', {
       method: 'POST',
       body: JSON.stringify({
         image: capturedImage.split(',')[1],
@@ -196,7 +196,7 @@ export default function Camera() {
   }
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       await handleShowCamera()
     })()
   }, [])
@@ -254,13 +254,17 @@ export default function Camera() {
               </div>
               {/* Capture */}
               <Image
+                width={44}
+                height={44}
                 className="w-[44px] h-[44px] cursor-pointer"
-                src={CAPTURE.src}
+                src={CAPTURE}
                 alt="capture image"
                 onClick={handleCapture}
               />
               {/* Change Camera */}
               <Image
+                width={44}
+                height={44}
                 className="w-[44px] h-[44px] cursor-pointer"
                 src={CHANGE}
                 alt="change camera image"
