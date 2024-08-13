@@ -2,11 +2,12 @@ import type { NextRequest, NextFetchEvent } from 'next/server'
 import { NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
-const secret = process.env.SECRET
+const secret = process.env.NEXTAUTH_SECRET
 
 export async function middleware(req: NextRequest, event: NextFetchEvent) {
-  const session = await getToken({ req, secret })
-  const { pathname } = req.nextUrl
+  // const session = await getToken({ req, secret })
+  // console.log('session: ', session)
+  // const { pathname } = req.nextUrl
 
   // if (session) {
   //   // 로그인된 상태에서 /auth/login 또는 /auth/signup으로 접근하면 리다이렉트
