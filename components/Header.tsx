@@ -13,7 +13,7 @@ const TITLE_MAP: { [key: string]: string } = {
   '/recommend/': '추천',
   '/recommend/detail/': '추천',
   '/fridge/': '냉장고',
-  '/auth/login': '로그인',
+  '/auth/login/': '로그인',
 }
 
 export default function Header() {
