@@ -17,12 +17,14 @@ import Image from 'next/image'
 import CHANGE from '@/meta/images/camera-change.svg'
 import CAPTURE from '@/meta/images/capture.png'
 import GALLERY from '@/meta/images/gallery.svg'
+import Loading from './Loading'
 
 export default function Camera({ initOpen = false, initIngredients }: { initOpen?: boolean, initIngredients: (items: never[]) => void }) {
   const [capturedImage, setCapturedImage] = useState<string>('')
   const [open, setOpen] = useState(initOpen)
   const [selectedDeviceIndex, setSelectedDeviceIndex] = useState<number>(0)
   const [deviceList, setDeviceList] = useState<MediaDeviceInfo[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -188,6 +190,8 @@ export default function Camera({ initOpen = false, initIngredients }: { initOpen
     setOpen(false)
     console.log('clicked')
 
+    setIsLoading(true);
+
     const response = await fetch('/getIngredientFromImage', {
       method: 'POST',
       body: JSON.stringify({
@@ -199,6 +203,7 @@ export default function Camera({ initOpen = false, initIngredients }: { initOpen
     console.log(data);
     const ingredientList = data.split(',');
     initIngredients(ingredientList);
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -208,90 +213,93 @@ export default function Camera({ initOpen = false, initIngredients }: { initOpen
   }, [])
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          type="button"
-          className="w-full"
-          onClick={handleShowCamera}
-        >
-          식재료 다시 촬영하기
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>카메라</DialogTitle>
-          <DialogDescription>
-            등록하고자 하는 식재료를 촬영해주세요.
-          </DialogDescription>
-        </DialogHeader>
-        <div>
+    <div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button
+            variant="outline"
+            type="button"
+            className="w-full"
+            onClick={handleShowCamera}
+          >
+            식재료 다시 촬영하기
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>카메라</DialogTitle>
+            <DialogDescription>
+              등록하고자 하는 식재료를 촬영해주세요.
+            </DialogDescription>
+          </DialogHeader>
           <div>
-            {/* Camera or Captured Image */}
-            <video
-              width={462}
-              height={346}
-              id="video"
-              ref={videoRef}
-              hidden={capturedImage !== ''}
-              playsInline
-              autoPlay
-            />
-            <canvas
-              width={462}
-              height={346}
-              id="canvas"
-              ref={canvasRef}
-              hidden={capturedImage === ''}
-            />
-          </div>
-          {!capturedImage ? (
-            <div className="flex justify-between mt-[24px]">
-              {/* Gallery */}
-              <div>
-                <input
-                  type="file"
-                  hidden
-                  id="galleryImage"
-                  accept="image/*"
-                  onChange={(e) => handleGalleryImage(e)}
-                />
-                <label htmlFor="galleryImage">
-                  <Image
-                    className="w-[44px] h-[44px] cursor-pointer"
-                    src={GALLERY}
-                    alt="gallery image"
+            <div>
+              {/* Camera or Captured Image */}
+              <video
+                width={462}
+                height={346}
+                id="video"
+                ref={videoRef}
+                hidden={capturedImage !== ''}
+                playsInline
+                autoPlay
+              />
+              <canvas
+                width={462}
+                height={346}
+                id="canvas"
+                ref={canvasRef}
+                hidden={capturedImage === ''}
+              />
+            </div>
+            {!capturedImage ? (
+              <div className="flex justify-between mt-[24px]">
+                {/* Gallery */}
+                <div>
+                  <input
+                    type="file"
+                    hidden
+                    id="galleryImage"
+                    accept="image/*"
+                    onChange={(e) => handleGalleryImage(e)}
                   />
-                </label>
+                  <label htmlFor="galleryImage">
+                    <Image
+                      className="w-[44px] h-[44px] cursor-pointer"
+                      src={GALLERY}
+                      alt="gallery image"
+                    />
+                  </label>
+                </div>
+                {/* Capture */}
+                <Image
+                  width={44}
+                  height={44}
+                  className="w-[44px] h-[44px] cursor-pointer"
+                  src={CAPTURE}
+                  alt="capture image"
+                  onClick={handleCapture}
+                />
+                {/* Change Camera */}
+                <Image
+                  width={44}
+                  height={44}
+                  className="w-[44px] h-[44px] cursor-pointer"
+                  src={CHANGE}
+                  alt="change camera image"
+                  onClick={handleChangeCamera}
+                />
               </div>
-              {/* Capture */}
-              <Image
-                width={44}
-                height={44}
-                className="w-[44px] h-[44px] cursor-pointer"
-                src={CAPTURE}
-                alt="capture image"
-                onClick={handleCapture}
-              />
-              {/* Change Camera */}
-              <Image
-                width={44}
-                height={44}
-                className="w-[44px] h-[44px] cursor-pointer"
-                src={CHANGE}
-                alt="change camera image"
-                onClick={handleChangeCamera}
-              />
-            </div>
-          ) : (
-            <div className="flex justify-between mt-[24px]">
-              <Button onClick={handleReset}>재촬영</Button>
-              <Button onClick={handleSubmit}>확인</Button>
-            </div>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
+            ) : (
+              <div className="flex justify-between mt-[24px]">
+                <Button onClick={handleReset}>재촬영</Button>
+                <Button onClick={handleSubmit}>확인</Button>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Loading isOpen={isLoading} />
+    </div>
   )
 }
