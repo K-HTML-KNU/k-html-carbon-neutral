@@ -208,8 +208,13 @@ export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild ref={dialogTriggerRef}>
-        <Button type="button" className="w-full" onClick={handleShowCamera}>
+      <DialogTrigger asChild>
+        <Button
+          variant="secondary"
+          type="button"
+          className="w-full"
+          onClick={handleShowCamera}
+        >
           식재료 다시 촬영하기
         </Button>
       </DialogTrigger>
@@ -261,6 +266,8 @@ export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
               </div>
               {/* Capture */}
               <Image
+                width={44}
+                height={44}
                 className="w-[44px] h-[44px] cursor-pointer"
                 src={CAPTURE.src}
                 alt="capture image"
@@ -268,6 +275,8 @@ export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
               />
               {/* Change Camera */}
               <Image
+                width={44}
+                height={44}
                 className="w-[44px] h-[44px] cursor-pointer"
                 src={CHANGE}
                 alt="change camera image"

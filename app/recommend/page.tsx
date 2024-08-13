@@ -17,6 +17,7 @@ import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 import { cn } from '@/lib/utils'
 import { TrashIcon } from '@radix-ui/react-icons'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
   carbornNetural: z.boolean(), // boolean 타입
@@ -42,6 +43,7 @@ const formSchema = z.object({
 
 export default function Recommend() {
   const { toast } = useToast()
+  const router = useRouter()
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -66,19 +68,20 @@ export default function Recommend() {
 
   const onSubmit = () => {
     const formData = form.getValues()
-    console.log('Form Data:', formData)
+    console.log('Form Data:', formData.toString())
     toast({
       title: '레시피를 생성하고 있습니다.',
     })
+    router.push('/recommend/detail')
   }
 
   return (
     <Form {...form}>
       <form
-        className="flex flex-col justify-between h-[calc(100vh-200px)]"
+        className="flex flex-col justify-between h-[calc(100vh-200px)] "
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="flex flex-col gap-4 overflow-y-auto">
+        <div className="flex flex-col gap-6 overflow-y-auto no-scrollbar pt-4 pb-12 px-4">
           <div>
             <h5 className="text-md font-semibold">레시피 생성하기</h5>
             <p className="text-gray-400">
@@ -97,8 +100,8 @@ export default function Recommend() {
           <AddInputForm form={form} name="ingredient" label="식재료 추가" />
           <div className="flex flex-col gap-4">
             <Label>선택된 식재료</Label>
-            {form.watch('ingredients').map((ingredient) => (
-              <div className="flex justify-between">
+            {form.watch('ingredients').map((ingredient, index) => (
+              <div className="flex justify-between" key={index}>
                 <p>{ingredient}</p>
                 <TrashIcon
                   className="hover:cursor-pointer"
@@ -146,7 +149,7 @@ export default function Recommend() {
           />
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 pt-4">
           <Camera initOpen={true} />
           <Button className="w-full" type="submit">
             레시피 생성하기

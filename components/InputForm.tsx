@@ -78,7 +78,11 @@ export const AddInputForm = ({ form, name, label }: formType) => {
             <FormControl>
               <Input placeholder={label} {...field} />
             </FormControl>
-            <Button type="button" onClick={addIngredient}>
+            <Button
+              type="button"
+              onClick={addIngredient}
+              variant={`${form.watch('ingredient') == '' ? 'secondary' : 'default'}`}
+            >
               식재료 추가하기
             </Button>
           </div>
