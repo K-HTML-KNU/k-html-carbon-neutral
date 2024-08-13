@@ -1,30 +1,30 @@
+import type { NextRequest, NextFetchEvent } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
-import { NextRequest, NextResponse } from 'next/server'
 
-interface Routes {
-  [key: string]: boolean
-}
+const secret = process.env.SECRET
 
-const publicOnlyUrls: Routes = {
-  '/auth': true,
-  '/auth/login': true,
-  '/auth/signup': true,
-  '/auth/error': true,
-}
+export async function middleware(req: NextRequest, event: NextFetchEvent) {
+  const session = await getToken({ req, secret })
+  const { pathname } = req.nextUrl
 
-export async function middleware(request: NextRequest) {
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  })
-
-  const exists = publicOnlyUrls[request.nextUrl.pathname]
-
-  if (!token) {
-    if (!exists) {
-      return NextResponse.redirect(new URL('/auth', request.url))
-    }
-  }
+  // if (session) {
+  //   // 로그인된 상태에서 /auth/login 또는 /auth/signup으로 접근하면 리다이렉트
+  //   if (
+  //     pathname.startsWith('/auth/login') ||
+  //     pathname.startsWith('/auth/signup')
+  //   ) {
+  //     return NextResponse.redirect(new URL('/', req.url))
+  //   }
+  // } else {
+  //   // 로그인되지 않은 상태에서 /auth/login 및 /auth/signup 이외의 경로로 접근하면 리다이렉트
+  //   if (
+  //     !pathname.startsWith('/auth/login') &&
+  //     !pathname.startsWith('/auth/signup')
+  //   ) {
+  //     return NextResponse.redirect(new URL('/auth/login', req.url))
+  //   }
+  // }
 
   return NextResponse.next()
 }

@@ -1,9 +1,9 @@
 'use client'
 
-import { signOut, useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 
-const page = () => {
+export default function MainPage() {
   const { data: session } = useSession()
 
   return (
@@ -62,5 +62,3 @@ const page = () => {
     </div>
   )
 }
-
-export default page
