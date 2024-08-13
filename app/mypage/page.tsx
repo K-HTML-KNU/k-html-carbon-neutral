@@ -53,9 +53,14 @@ export default function Mypage() {
 
             <div>
               <h2 className="font-medium">Team Github</h2>
-              <p className="text-slate-600">
-                https://github.com/K-HTML-KNU/k-html-carbon-neutral
-              </p>
+              <a
+                href="https://github.com/K-HTML-KNU/k-html-carbon-neutral"
+                target="_blank"
+              >
+                <p className="text-slate-600">
+                  https://github.com/K-HTML-KNU/k-html-carbon-neutral
+                </p>
+              </a>
             </div>
           </div>
         </>
@@ -68,7 +73,9 @@ export default function Mypage() {
         </div>
       </div>
 
-      <Button className="mt-12">로그아웃</Button>
+      <Button className="mt-12" variant="destructive">
+        로그아웃
+      </Button>
     </div>
   )
 }

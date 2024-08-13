@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from './ui/button'
+import { Checkbox } from './ui/checkbox'
 import {
   Select,
   SelectContent,
@@ -104,10 +105,12 @@ export const ToggleForm = ({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm gap-8">
+        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm gap-8 pr-6">
           <div className="space-y-0.5">
             <FormLabel>{label}</FormLabel>
-            <FormDescription>{description}</FormDescription>
+            <FormDescription className="whitespace-pre-wrap">
+              {description}
+            </FormDescription>
           </div>
           <FormControl>
             <Switch checked={field.value} onCheckedChange={field.onChange} />
@@ -146,6 +149,31 @@ export const SelectForm = ({
             ))}
           </SelectContent>
         </Select>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+)
+
+export const CheckBoxForm = ({ form, name }: formType) => (
+  <FormField
+    control={form.control}
+    name={name}
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel />
+        <FormControl>
+          <div className="flex items-start gap-[8px]">
+            <Checkbox
+              id={name}
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+            <label htmlFor={name} className="text-small text-gray-500">
+              {name}
+            </label>
+          </div>
+        </FormControl>
         <FormMessage />
       </FormItem>
     )}

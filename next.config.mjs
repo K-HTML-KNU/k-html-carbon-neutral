@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['khtml.kr.object.ncloudstorage.com'],
+    domains: ['khtml.kr.object.ncloudstorage.com', 'recipe1.ezmember.co.kr'],
   },
   env: {
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,

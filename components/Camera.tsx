@@ -210,7 +210,7 @@ export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          variant="secondary"
+          variant="outline"
           type="button"
           className="w-full"
           onClick={handleShowCamera}
