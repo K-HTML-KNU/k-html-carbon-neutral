@@ -4,7 +4,7 @@ import Camera from '@/components/Camera'
 
 export default function Home() {
   return (
-    <main>
+    <div>
       {/* 탄소 중립 */}
       <section></section>
       {/* 나와 관련된 레시피 */}
@@ -13,6 +13,6 @@ export default function Home() {
       <section>
         <Camera />
       </section>
-    </main>
+    </div>
   )
 }
