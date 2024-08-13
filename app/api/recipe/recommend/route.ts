@@ -1,11 +1,12 @@
 // app/api/ingredient/add/route.ts
 import { NextResponse } from 'next/server'
 
+const apiKey = process.env.OPENAI_API_KEY
+
 export async function POST(request: Request) {
   try {
     // const { email, ingredientName } = await request.json()
 
-    const apiKey = process.env.OPENAI_API_KEY
     if (!apiKey) {
       console.error('API Key is missing')
       return NextResponse.json({ error: 'API Key is missing' }, { status: 500 })
