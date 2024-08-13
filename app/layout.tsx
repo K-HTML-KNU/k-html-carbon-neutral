@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
+
+import AuthContext from '@/context/authContext'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'k-html carbon neutral',
-  description: 'A carbon neutral website',
+  title: 'K-HTML-KNU',
+  description: 'K-HTML-KNU next app',
 }
 
 export default function RootLayout({
@@ -13,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body style={{ maxWidth: '640px', margin: '0 auto' }}>{children}</body>
+      <body>
+        <AuthContext>{children}</AuthContext>
+      </body>
     </html>
   )
 }
