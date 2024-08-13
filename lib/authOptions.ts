@@ -1,16 +1,36 @@
 import { AuthOptions, SessionStrategy } from 'next-auth'
-// eslint-disable-next-line import/no-named-as-default
-import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
-
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { hash } from 'bcryptjs'
 import { prisma } from '@/prisma/prisma'
-import { findUserByEmail } from '@/utils/auth'
+import { findUserByEmail, verifyPassword } from '@/utils/auth'
 
-const validateCredentials = async (email: string) => {
+const signUpUser = async (email: string, password: string) => {
+  const hashedPassword = await hash(password, 10)
+  return prisma.user.create({
+    data: {
+      name: 'test_name',
+      email,
+      password: hashedPassword,
+    },
+  })
+}
+
+const validateCredentials = async (email: string, password: string) => {
   const user = await findUserByEmail(email)
 
   if (!user) {
     throw new Error('No user found with the given email')
+  }
+
+  if (user.password === 'oauth-google') {
+    throw new Error('User signed up with Google')
+  }
+
+  const isValid = await verifyPassword(password, user.password)
+
+  if (!isValid) {
+    throw new Error('Incorrect password')
   }
 
   return user
@@ -33,17 +53,27 @@ export const authOptions: AuthOptions = {
       name: 'Credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
         method: { label: 'Method', type: 'text' },
       },
       async authorize(credentials) {
-        if (!credentials?.email) {
+        if (!credentials?.email || !credentials?.password) {
           throw new Error('Email and password are required')
         }
 
-        const { email, method } = credentials
+        const { email, password, method } = credentials
+
+        if (method === 'signup') {
+          const user = await findUserByEmail(email)
+          if (user) {
+            throw new Error('User already exists')
+          }
+          const createdUser = await signUpUser(email, password)
+          return { ...createdUser, id: String(createdUser.id) }
+        }
 
         if (method === 'login') {
-          const createdUser = await validateCredentials(email)
+          const createdUser = await validateCredentials(email, password)
           return { ...createdUser, id: String(createdUser.id) }
         }
 
@@ -63,8 +93,9 @@ export const authOptions: AuthOptions = {
         if (!userExists) {
           await prisma.user.create({
             data: {
-              name: user.name!,
+              name: 'test_name',
               email: user.email!,
+              password: 'oauth-google',
             },
           })
         }

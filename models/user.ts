@@ -5,8 +5,16 @@ export interface User extends PrismaUser {
   carbon_reduce: number
   email: string
   name: string
+  password: string
   UserIngredients: UserIngredients[]
   recipeHistory: RecipeHistory[]
+}
+
+export interface UserBase {
+  id: number
+  name: string
+  email: string
+  password: string
 }
 
 export interface UserIngredients {
