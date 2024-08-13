@@ -188,7 +188,7 @@ export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
     setOpen(false)
     console.log('clicked')
 
-    const response = await fetch('image/MemoryTest-YOLOFunction-EoPm6OiUbjtx', {
+    const response = await fetch('/getIngredientFromImage', {
       method: 'POST',
       body: JSON.stringify({
         image: capturedImage.split(',')[1],
@@ -201,7 +201,7 @@ export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
   }
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       await handleShowCamera()
     })()
   }, [])
@@ -269,7 +269,7 @@ export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
                 width={44}
                 height={44}
                 className="w-[44px] h-[44px] cursor-pointer"
-                src={CAPTURE.src}
+                src={CAPTURE}
                 alt="capture image"
                 onClick={handleCapture}
               />

@@ -18,28 +18,33 @@ import MEET from '@/meta/images/food/meet.png'
 import SALT from '@/meta/images/food/salt.png'
 import SEAFOOD from '@/meta/images/food/seafood.png'
 import VEGETABLE from '@/meta/images/food/vegetable.png'
+import Oil from '@/meta/images/food/oil.png'
 
 import { Button } from './ui/button'
 
-type FoodType =
-  | 'egg'
-  | 'fruit'
-  | 'grain'
-  | 'legume'
-  | 'meet'
-  | 'salt'
-  | 'seafood'
-  | 'vegetable'
+export type FoodType =
+  "Default category" |
+  "Grains and Starches" |
+  "Vegetables" |
+  "Fruits" |
+  "Meat" |
+  "Seafood" |
+  "Dairy and Eggs" |
+  "Legumes and Nuts" |
+  "Condiments and Spices" |
+  "Fats and Oils" |
+  "Other Processed Foods";
 
 const FOOD_IMAGES_MAP: { [key: string]: StaticImageData } = {
-  egg: EGG,
-  fruit: FRUIT,
-  grain: GRAIN,
-  legume: LEGUME,
-  meet: MEET,
-  salt: SALT,
-  seafood: SEAFOOD,
-  vegetable: VEGETABLE,
+  "Dairy and Eggs": EGG,
+  "Fruits": FRUIT,
+  "Grains and Starches": GRAIN,
+  "Legumes and Nuts": LEGUME,
+  "Meat": MEET,
+  "Condiments and Spices": SALT,
+  "Seafood": SEAFOOD,
+  "Vegetables": VEGETABLE,
+  "Fats and Oils": Oil
 }
 
 export default function Food({
@@ -55,6 +60,7 @@ export default function Food({
   nutrition: string
   storage: string
 }) {
+
   return (
     <Drawer>
       <DrawerTrigger>
