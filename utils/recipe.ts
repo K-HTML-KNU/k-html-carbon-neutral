@@ -7,6 +7,9 @@ type RecipeStep = {
 
 type Recipe = {
   recipe_name: string
+  representative_ingredient?: string
+  storage_method?: string
+  nutrition_info?: string
   ingredient: string[]
   serving: number
   difficulty: number
@@ -26,6 +29,14 @@ export function parseRecipeString(recipeString: string): Recipe {
   lines.forEach((line) => {
     if (line.startsWith('recipe_name:')) {
       recipe.recipe_name = line.replace('recipe_name:', '').trim()
+    } else if (line.startsWith('representative_ingredient:')) {
+      recipe.representative_ingredient = line
+        .replace('representative_ingredient:', '')
+        .trim()
+    } else if (line.startsWith('storage_method:')) {
+      recipe.storage_method = line.replace('storage_method:', '').trim()
+    } else if (line.startsWith('nutrition_info:')) {
+      recipe.nutrition_info = line.replace('nutrition_info:', '').trim()
     } else if (line.startsWith('ingredient:')) {
       recipe.ingredient = line
         .replace('ingredient:', '')

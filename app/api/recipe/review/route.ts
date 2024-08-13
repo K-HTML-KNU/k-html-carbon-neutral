@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/prisma/prisma'
+import { categoryToId } from '../../ingredient/add/route'
 
 export async function POST(request: Request) {
   try {
@@ -51,7 +52,6 @@ export async function POST(request: Request) {
           ingredients: true,
         },
       })
-
       if (userIngredient) {
         await prisma.userIngredients.update({
           where: {
@@ -64,10 +64,23 @@ export async function POST(request: Request) {
       } else {
         // 3-2. UserIngredients 테이블에 값이 없을 경우 Ingredients 테이블에 값을 추가하고 UserIngredients에 추가
 
+        const category_res = await fetch(
+          'https://vwekbsqcaf.execute-api.ap-northeast-2.amazonaws.com/default/Openai-Food-HelloWorldFunction-X8zN5be3fV7J',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              ingredient_name: ingredientsArray[0],
+            }),
+          },
+        )
+        const { category } = await category_res.json()
+        const categoryNum = Number.parseInt(categoryToId[category].toString())
+        console.log(category, categoryNum)
+
         // 먼저 적절한 IngredientCategory가 존재하는지 확인
         let ingredientCategory = await prisma.ingredientCategory.findFirst({
           where: {
-            name: 'General', // 카테고리 이름을 바꾸거나 필요에 따라 동적으로 변경할 수 있습니다.
+            name: category, // 카테고리 이름을 바꾸거나 필요에 따라 동적으로 변경할 수 있습니다.
           },
         })
 
@@ -75,7 +88,7 @@ export async function POST(request: Request) {
           // IngredientCategory가 없으면 새로 생성
           ingredientCategory = await prisma.ingredientCategory.create({
             data: {
-              name: 'General', // 필요한 카테고리 이름으로 변경
+              name: category,
             },
           })
         }
