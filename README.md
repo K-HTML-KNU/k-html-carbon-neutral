@@ -3,7 +3,7 @@ __ __ __
 어플 대표 이미지
 
 - 배포 URL : https://k-html-carbon-neutral.vercel.app/
-- QRcode ![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/EatNature_qrcode.png]]
+- QRcode ![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/EatNature_qrcode.png)
 
 ## 목차
 ___
@@ -28,7 +28,7 @@ ____
 
 |                                         **곽재원**                                          |                        **양동균**                        |                                           **신홍기**                                           |                            **홍기현**                            |
 | :--------------------------------------------------------------------------------------: | :---------------------------------------------------: | :-----------------------------------------------------------------------------------------: | :-----------------------------------------------------------: |
-| ![[KakaoTalk_Photo_2024-08-14-01-44-01.jpeg]]<br>@yeon1615](https://github.com/yeon1615) | [!  <br>@Cheorizzang](https://github.com/Cheorizzang) | ![[KakaoTalk_Photo_2024-08-14-01-37-55.png]][!<br>@heejiyang](https://github.com/heejiyang) | ![[증명사진.jpeg]]<br>@journey-ji](https://github.com/journey-ji) |
+| ![image](KakaoTalk_Photo_2024-08-14-01-44-01.jpeg)<br>@yeon1615](https://github.com/yeon1615) | [!  <br>@Cheorizzang](https://github.com/Cheorizzang) | ![image](KakaoTalk_Photo_2024-08-14-01-37-55.png)[!<br>@heejiyang](https://github.com/heejiyang) | ![image](증명사진.jpeg)<br>@journey-ji](https://github.com/journey-ji) |
 |                                         백엔드 및 AI                                         |                      프론트앤드 및 백엔드                      |                                            프론트엔드                                            |                              AI                               |
 |                                                                                          |                                                       |                                                                                             |                                                               |
 |                                                                                          |                                                       |                                                                                             |                                                               |
@@ -239,41 +239,41 @@ ___
 홈 화면 
 - 환경을 위한 추천레시피가 있습니다. 
 - 지금까지의 환경을 얼마나 지켰는지에 대한 수치가 있습니다. 
-![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/1.png]]
+![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/1.png)
 
 Login
 - 구글로그인을 구현하였습니다. 
-![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/2.png]]
+![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/2.png)
 
 카메라로 음식인식
 - 카메라를 이용해 음식을 찍을 수 있습니다. 
 - 카메라 전환버튼과 겔러리버튼이 있습니다. 
-![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/3.png]]
+![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/3.png)
 음식 등록 후
-![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/4.png]]
+![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/4.png)
 
 자동 추가
 - 식재료를 인식하고 자동으로 식재료가 추가됩니다. 
 - 이후 탄소중립 레시피를 선택하고 레시피 난이도와 시간 인원수를 설정하면 레시피를 생성할 수 있습니다. 
 
- ![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/5.png]] 
+ ![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/5.png) 
 
-![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/6.png]]
+![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/6.png)
 레시피 생성
 
-![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/7.png]]
+![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/7.png)
 레시피 리뷰
 - 레시피의 리뷰를 남길 수 있고 남은 식재료를 선택하여 냉장고로 옮길 수 있다. 
-![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/8.png]]
+![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/8.png)
 
 냉장고
 - 냉장고에 저장되어 있는 식품들을 불러오고 추가할 수 있습니다.
-![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/9.png]]
+![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/9.png)
 
 수치화
-![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/10.png]]
-내정보![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/11.png]]
+![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/10.png)
+내정보![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/11.png)
 
 식품정보
 - 식품 정보와 보관방법 처리방법을 알려줍니다. 
-![[https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/12.png]]
+![image](https://raw.githubusercontent.com/K-HTML-KNU/k-html-carbon-neutral/main/assets/12.png)
