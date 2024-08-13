@@ -59,6 +59,10 @@ export default function Recommend() {
     },
   })
 
+  const initIngredient = (ingredients: never[]) => {
+    form.setValue('ingredients', ingredients);
+  }
+
   const removeIngredient = (ingredientToRemove: string) => {
     const existingIngredients = form.getValues('ingredients') || []
     const updatedIngredients = existingIngredients.filter(
@@ -75,6 +79,31 @@ export default function Recommend() {
       title: '레시피를 생성하고 있습니다.',
     })
     router.push('/recommend/detail')
+  }
+
+  const handleRecommendRecipe = async () => {
+    const ingredients = form.getValues('ingredients') || [];
+    const carbornNetural = form.getValues('carbornNetural');
+
+    if (ingredients.length == 0) {
+      return;
+    }
+
+    console.log(ingredients, carbornNetural);
+
+    const response = await fetch('/api/recommand-recipe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ingredients: ingredients,
+        isVegan: carbornNetural,
+      }),
+    });
+
+    const data = await response.json();
+    console.log(data);
   }
 
   return (
@@ -152,8 +181,8 @@ export default function Recommend() {
         </ScrollArea>
 
         <div className="flex gap-4 pt-4">
-          <Camera initOpen={true} />
-          <Button className="w-full" type="submit">
+          <Camera initOpen={true} initIngredients={initIngredient} />
+          <Button className="w-full" type="submit" onClick={handleRecommendRecipe}>
             레시피 생성하기
           </Button>
         </div>
