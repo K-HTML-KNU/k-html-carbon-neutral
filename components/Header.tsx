@@ -9,9 +9,11 @@ import LEFT_ARROW from '@/meta/images/left-arrow.svg'
 
 const TITLE_MAP: { [key: string]: string } = {
   '/': '홈페이지',
-  '/mypage': '내정보',
-  '/recommend': '추천',
-  '/fridge': '냉장고',
+  '/mypage/': '내정보',
+  '/recommend/': '추천',
+  '/recommend/detail/': '추천',
+  '/fridge/': '냉장고',
+  '/auth/login': '로그인',
 }
 
 export default function Header() {
