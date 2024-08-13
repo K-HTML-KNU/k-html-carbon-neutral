@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: "/getIngredientFromImage",
-        destination: `https://lh6ujwj0tj.execute-api.ap-northeast-2.amazonaws.com/image/MemoryTest-YOLOFunction-EoPm6OiUbjtx`
+        destination: `https://vwekbsqcaf.execute-api.ap-northeast-2.amazonaws.com/default/GPTtoIMG-OpenAIImgFunction-5gjh8i2QF6Js`
       },
     ];
   },

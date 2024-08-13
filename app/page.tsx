@@ -1,16 +1,12 @@
 'use client'
+
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  Card
 } from "@/components/ui/card"
-import Camera from '@/components/Camera'
 import Food from "@/components/Food"
 
 export default function Home() {
+
   return (
     <div>
       {/* 탄소 중립 */}
@@ -42,10 +38,6 @@ export default function Home() {
           <Food type="Grains and Starches" name="계란" description="달걀은 단백질이 풍부하고, 지방과 콜레스테롤 함량이 낮아서 건강에 좋은 식품입니다." nutrition="굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양굳굳 영양" storage="잘 저장 잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장잘 저장" />
         </div>
       </section>
-      {/* 카메라 */}
-      {/* <section>
-        <Camera />
-      </section> */}
     </div>
   )
 }
