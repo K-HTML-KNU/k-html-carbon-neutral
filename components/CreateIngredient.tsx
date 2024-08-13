@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 
 import {
@@ -10,11 +12,53 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
 import { Button } from './ui/button'
 
 import PLUS from '@/meta/images/plus.svg'
+import { useSession } from 'next-auth/react'
+import { useState } from 'react'
 
 export default function CreateIngredient() {
+  const { data: session } = useSession()
+  const [ingredient, setIngredient] = useState('')
+
+  const handleChangeIngredient = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIngredient(e.target.value)
+  }
+
+  const handleAddIngredient = async () => {
+    const email = session?.user?.email
+    console.log(session)
+    if (!email) {
+      return
+    }
+    try {
+      const response = await fetch('/api/ingredient/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          ingredientName: ingredient,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.code === 200) {
+        window.location.reload();
+      } else {
+        alert('재료 추가에 실패했습니다.')
+      }
+    } catch (error) {
+      console.error('Error:', error)
+    }
+  }
+
   return (
     <Drawer>
       <DrawerTrigger>
@@ -39,11 +83,12 @@ export default function CreateIngredient() {
             본인의 식재료를 추가하세요.
           </DrawerDescription>
         </DrawerHeader>
-        <div>
-
+        <div className='px-[16px]'>
+          <Label htmlFor="picture">식재료를 입력해주세요</Label>
+          <Input id="picture" placeholder='김치' value={ingredient} onChange={(e) => handleChangeIngredient(e)} />
         </div>
         <DrawerFooter>
-          <Button>추가하기</Button>
+          <Button onClick={() => handleAddIngredient()}>추가하기</Button>
           <DrawerClose>
             <Button variant="outline">취소하기</Button>
           </DrawerClose>

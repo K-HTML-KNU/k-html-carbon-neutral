@@ -183,7 +183,7 @@ export default function Camera() {
   }
 
   const handleSubmit = async () => {
-    const response = await fetch('https://lh6ujwj0tj.execute-api.ap-northeast-2.amazonaws.com/image/MemoryTest-YOLOFunction-EoPm6OiUbjtx', {
+    const response = await fetch('/getIngredientFromImage', {
       method: 'POST',
       body: JSON.stringify({
         image: capturedImage.split(',')[1],
