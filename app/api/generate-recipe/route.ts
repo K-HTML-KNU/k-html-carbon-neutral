@@ -1,4 +1,5 @@
 import { prisma } from '@/prisma/prisma'
+import { parseRecipeString } from '@/utils/recipe'
 import { NextResponse } from 'next/server'
 
 function filterVeganIngredients(ingredients: string[]): string[] {
@@ -173,9 +174,10 @@ export async function POST(request: Request) {
     }
     const prompt_data = JSON.stringify(recipes, null)
     let prompt = `
-      다음은 [${ingredient}]을 이용해 만들 수 있는 요리 레시피 ${recipes.length}개이다. ${prompt_data} \n\n
-      참고: - view_count: 조회수(12 ~ 15192, mean: 6291) - scrap_count: 스크랩 횟수(116 ~ 462, mean: 145) - difficulty: 난이도(category: 1 ~ 5, 값이 클수록 어렵다) - cooking_time: 요리시간(분: 5 ~ 120, mean: 43), ${isVegan ? '사용자는 비건임으로 비건 음식을 추천해야 한다.' : ''} \n\n
-      위 레시피를 기반으로 [${ingredient}]을 이용해 만들 수 있는 가장 적절한 레시피를 다음 규칙을 지켜 작성하여라. 1. 어느 한 레시피만을 사용하지 말아라. 2개 이상의 레시피를 사용하여라. 2. 작성된 레시피에서 사용된 재료들은 모두 ingredients에 명시하여라. 3. "반드시" 아래와 같은 JSON 형식으로 작성하여라.  {   'recipe_name': "string",  'ingredient': "string, string, string, string, string, string",  'serving': int,   'difficulty': int,'cooking_time': int,'steps': [{ 'step': int,'subtitle': "string" 'image': "string",'description': "string"  }   ] }`
+      다음은 ${'달걀'}을 이용해 만들 수 있는 요리 레시피 ${recipes.length}개이다.\n\n${prompt_data}\n
+      참고:\n- view_count: 조회수(12 ~ 15192, mean: 6291)\n- scrap_count: 스크랩 횟수(116 ~ 462, mean: 145)\n- difficulty: 난이도(category: 1 ~ 5, 값이 클수록 어렵다)\n- cooking_time: 요리시간(분: 5 ~ 120, mean: 43), ${isVegan ? '사용자는 비건임으로 비건 음식을 추천해야 한다.' : ''}\n
+      위 레시피를 기반으로 ${'달걀'}을 이용해 만들 수 있는 가장 적절한 레시피를 다음 규칙을 지켜 작성하여라.\n1. 어느 한 레시피만을 사용하지 말아라. 2개 이상의 레시피를 사용하여라.\n2. 작성된 레시피에서 사용된 재료들은 모두 ingredients에 명시하여라.\n3. "반드시" 아래와 같이 각 내용을 줄내림으로 구분하는 형식으로 작성하여라.\n
+      recipe_name: 간장계란밥\ningredient: 밥, 계란, 간장, 김치, 미역, 참기름\nserving: 2\ndifficulty: 2\ncooking_time: 30\nsteps: [\nstep: 1 || subtitle: 계란 풀기 || image: 623561-1 || description: 밥을 넣고 계란을 풀어주세요.\n]\n`
 
     const apiUrl =
       'https://k-html-team07.openai.azure.com/openai/deployments/Team07/chat/completions?api-version=2024-02-15-preview'
@@ -203,22 +205,8 @@ export async function POST(request: Request) {
     })
     const data = await response.json()
     const json_str = data['choices'][0]['message']['content']
-    const cleanJsonStr = json_str
-      .replace(/'/g, '"') // 작은 따옴표를 큰 따옴표로 변경
-      .replace(/(\d+):/g, '"$1":') // 키값을 문자열로 변환
-      .replace(/,\s*}/g, '}') // 잘못된 쉼표 제거
-    const json = JSON.parse(cleanJsonStr)
-    const steps = json['steps']
+    const json = parseRecipeString(json_str)
 
-    for (let i = 0; i < steps.length; i++) {
-      try {
-        const key = steps[i]['image'].replace('[', '').replace(']', '')
-        // @ts-ignore
-        steps[i]['image'] = id_match[key]
-      } catch (e) {
-        continue
-      }
-    }
     return NextResponse.json(
       {
         message: 'Ingredient added to user successfully',
