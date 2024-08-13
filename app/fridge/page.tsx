@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 const idToCategory: { [key: number]: string } = {
-  1: "Default category",
+  1: "Other Processed Foods",
   2: "Grains and Starches",
   3: "Vegetables",
   4: "Fruits",
