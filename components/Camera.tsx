@@ -1,4 +1,5 @@
 'use client'
+'use client'
 
 import { useEffect, useRef, useState } from 'react'
 
@@ -13,9 +14,9 @@ import {
 } from '@/components/ui/dialog'
 import Image from 'next/image'
 
-import CHANGE from '@/src/images/camera-change.svg'
-import CAPTURE from '@/src/images/capture.png'
-import GALLERY from '@/src/images/gallery.svg'
+import CHANGE from '@/meta/images/camera-change.svg'
+import CAPTURE from '@/meta/images/capture.png'
+import GALLERY from '@/meta/images/gallery.svg'
 
 export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
   const [capturedImage, setCapturedImage] = useState<string>('')
@@ -25,7 +26,6 @@ export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const dialogTriggerRef = useRef(null)
 
   function createVideoConstraints(deviceId: string) {
     const videoContraints = {
@@ -260,7 +260,7 @@ export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
                 </label>
               </div>
               {/* Capture */}
-              <img
+              <Image
                 className="w-[44px] h-[44px] cursor-pointer"
                 src={CAPTURE.src}
                 alt="capture image"

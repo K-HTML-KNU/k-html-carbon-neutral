@@ -10,6 +10,13 @@ export interface User extends PrismaUser {
   recipeHistory: RecipeHistory[]
 }
 
+export interface UserBase {
+  id: number
+  name: string
+  email: string
+  password: string
+}
+
 export interface UserIngredients {
   id: number
   ingredientName: string

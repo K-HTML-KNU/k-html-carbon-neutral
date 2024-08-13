@@ -1,9 +1,7 @@
-import { hash } from 'bcryptjs'
 import { AuthOptions, SessionStrategy } from 'next-auth'
-// eslint-disable-next-line import/no-named-as-default
-import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
-
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { hash } from 'bcryptjs'
 import { prisma } from '@/prisma/prisma'
 import { findUserByEmail, verifyPassword } from '@/utils/auth'
 
