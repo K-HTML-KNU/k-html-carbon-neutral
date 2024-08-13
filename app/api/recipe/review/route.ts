@@ -1,6 +1,19 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/prisma/prisma'
-import { categoryToId } from '../../ingredient/add/route'
+
+const categoryToId: { [key: string]: number } = {
+  'Default category': 1,
+  'Grains and Starches': 2,
+  Vegetables: 3,
+  Fruits: 4,
+  Meat: 5,
+  Seafood: 6,
+  'Dairy and Eggs': 7,
+  'Legumes and Nuts': 8,
+  'Condiments and Spices': 9,
+  'Fats and Oils': 10,
+  'Other Processed Foods': 11,
+}
 
 export async function POST(request: Request) {
   try {

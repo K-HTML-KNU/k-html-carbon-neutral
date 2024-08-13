@@ -2,7 +2,7 @@
 import { prisma } from '@/prisma/prisma'
 import { NextResponse } from 'next/server'
 
-export const categoryToId: { [key: string]: number } = {
+const categoryToId: { [key: string]: number } = {
   'Default category': 1,
   'Grains and Starches': 2,
   Vegetables: 3,
