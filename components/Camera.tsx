@@ -1,7 +1,9 @@
 'use client'
+'use client'
 
 import { useEffect, useRef, useState } from 'react'
 
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -11,14 +13,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import Image from 'next/image'
-import { Button } from '@/components/ui/button'
 
-import GALLERY from '@/meta/images/gallery.svg'
-import CAPTURE from '@/meta/images/capture.png'
 import CHANGE from '@/meta/images/camera-change.svg'
+import CAPTURE from '@/meta/images/capture.png'
+import GALLERY from '@/meta/images/gallery.svg'
 
-export default function Camera() {
+export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
   const [capturedImage, setCapturedImage] = useState<string>('')
+  const [open, setOpen] = useState(initOpen)
   const [selectedDeviceIndex, setSelectedDeviceIndex] = useState<number>(0)
   const [deviceList, setDeviceList] = useState<MediaDeviceInfo[]>([])
 
@@ -183,6 +185,9 @@ export default function Camera() {
   }
 
   const handleSubmit = async () => {
+    setOpen(false)
+    console.log('clicked')
+
     const response = await fetch('/getIngredientFromImage', {
       method: 'POST',
       body: JSON.stringify({
@@ -202,9 +207,16 @@ export default function Camera() {
   }, [])
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button onClick={handleShowCamera}>카메라</Button>
+        <Button
+          variant="outline"
+          type="button"
+          className="w-full"
+          onClick={handleShowCamera}
+        >
+          식재료 다시 촬영하기
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -10,7 +10,7 @@ const nextConfig = {
   },
   trailingSlash: true,
   images: {
-    domains: ['khtml.kr.object.ncloudstorage.com'],
+    domains: ['khtml.kr.object.ncloudstorage.com', 'recipe1.ezmember.co.kr'],
   },
   env: {
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,

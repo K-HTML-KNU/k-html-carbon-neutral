@@ -78,3 +78,13 @@
 body {
   font-family: 'Pretendard', sans-serif;
 }
+
+/* styles.css */
+.no-scrollbar::-webkit-scrollbar {
+  @apply hidden;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
