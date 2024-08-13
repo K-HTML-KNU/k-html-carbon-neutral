@@ -1,8 +1,8 @@
 'use client'
 
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -37,6 +37,7 @@ export default function LoginPage() {
       }
     } catch (e) {
       setError('Something went wrong')
+      return
     }
   }
   return (

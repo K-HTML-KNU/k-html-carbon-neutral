@@ -1,4 +1,4 @@
-import Image, { StaticImageData } from "next/image";
+import Image, { StaticImageData } from 'next/image'
 
 import {
   Drawer,
@@ -9,38 +9,62 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer"
-import EGG from "@/src/images/food/egg.png";
-import FRUIT from "@/src/images/food/fruit.png";
-import GRAIN from "@/src/images/food/grain.png";
-import LEGUME from "@/src/images/food/legume.png";
-import MEET from "@/src/images/food/meet.png";
-import SALT from "@/src/images/food/salt.png";
-import SEAFOOD from "@/src/images/food/seafood.png";
-import VEGETABLE from "@/src/images/food/vegetable.png";
+} from '@/components/ui/drawer'
+import EGG from '@/meta/images/food/egg.png'
+import FRUIT from '@/meta/images/food/fruit.png'
+import GRAIN from '@/meta/images/food/grain.png'
+import LEGUME from '@/meta/images/food/legume.png'
+import MEET from '@/meta/images/food/meet.png'
+import SALT from '@/meta/images/food/salt.png'
+import SEAFOOD from '@/meta/images/food/seafood.png'
+import VEGETABLE from '@/meta/images/food/vegetable.png'
 
-import { Button } from "./ui/button";
+import { Button } from './ui/button'
 
-type FoodType = "egg" | "fruit" | "grain" | "legume" | "meet" | "salt" | "seafood" | "vegetable"
+type FoodType =
+  | 'egg'
+  | 'fruit'
+  | 'grain'
+  | 'legume'
+  | 'meet'
+  | 'salt'
+  | 'seafood'
+  | 'vegetable'
 
 const FOOD_IMAGES_MAP: { [key: string]: StaticImageData } = {
-  "egg": EGG,
-  "fruit": FRUIT,
-  "grain": GRAIN,
-  "legume": LEGUME,
-  "meet": MEET,
-  "salt": SALT,
-  "seafood": SEAFOOD,
-  "vegetable": VEGETABLE,
+  egg: EGG,
+  fruit: FRUIT,
+  grain: GRAIN,
+  legume: LEGUME,
+  meet: MEET,
+  salt: SALT,
+  seafood: SEAFOOD,
+  vegetable: VEGETABLE,
 }
 
-export default function Food({ type, name, description, nutrition, storage }: { type: FoodType, name: string, description: string, nutrition: string, storage: string }) {
+export default function Food({
+  type,
+  name,
+  description,
+  nutrition,
+  storage,
+}: {
+  type: FoodType
+  name: string
+  description: string
+  nutrition: string
+  storage: string
+}) {
   return (
     <Drawer>
       <DrawerTrigger>
         <div className="w-[139px] cursor-pointer group">
           {/* img */}
-          <Image src={FOOD_IMAGES_MAP[type]} alt="food_img" className="group-hover:border border-black rounded-md" />
+          <Image
+            src={FOOD_IMAGES_MAP[type]}
+            alt="food_img"
+            className="group-hover:border border-black rounded-md"
+          />
           {/* name */}
           <h3 className="text-lg font-semibold">{name}</h3>
           {/* description */}
@@ -50,11 +74,17 @@ export default function Food({ type, name, description, nutrition, storage }: { 
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>{name}</DrawerTitle>
-          <DrawerDescription>식품 영량 정보 및 보관 방법을 확인합니다.</DrawerDescription>
+          <DrawerDescription>
+            식품 영량 정보 및 보관 방법을 확인합니다.
+          </DrawerDescription>
         </DrawerHeader>
         <div className="flex flex-col gap-[16px] px-[16px] max-h-[440px] overflow-y-scroll">
           <div className="flex justify-center">
-            <Image src={FOOD_IMAGES_MAP[type]} alt="food_img" className="w-[50%]" />
+            <Image
+              src={FOOD_IMAGES_MAP[type]}
+              alt="food_img"
+              className="w-[50%]"
+            />
           </div>
           <p className="text-sm leading-7 line-clamp-2">{description}</p>
           <div>
