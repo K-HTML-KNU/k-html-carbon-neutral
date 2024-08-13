@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     }
 
     const apiUrl =
-      'https://twomiles.openai.azure.com/openai/deployments/gpt4o/chat/completions?api-version=2024-02-15-preview'
+      'https://k-html-team07.openai.azure.com/openai/deployments/Team07/chat/completions?api-version=2024-02-15-preview'
 
     const response = await fetch(apiUrl, {
       method: 'POST',
