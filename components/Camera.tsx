@@ -18,7 +18,7 @@ import CHANGE from '@/meta/images/camera-change.svg'
 import CAPTURE from '@/meta/images/capture.png'
 import GALLERY from '@/meta/images/gallery.svg'
 
-export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
+export default function Camera({ initOpen = false, initIngredients }: { initOpen?: boolean, initIngredients: (items: never[]) => void }) {
   const [capturedImage, setCapturedImage] = useState<string>('')
   const [open, setOpen] = useState(initOpen)
   const [selectedDeviceIndex, setSelectedDeviceIndex] = useState<number>(0)
@@ -195,9 +195,10 @@ export default function Camera({ initOpen = false }: { initOpen?: boolean }) {
       }),
     })
 
-    const data = await response.json()
-
-    // TODO Something
+    const data = await response.json();
+    console.log(data);
+    const ingredientList = data.split(',');
+    initIngredients(ingredientList);
   }
 
   useEffect(() => {

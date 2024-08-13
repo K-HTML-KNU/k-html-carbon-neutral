@@ -19,7 +19,8 @@ const categoryToId: { [key: string]: number } = {
 export async function POST(request: Request) {
   try {
     const { email, ingredientName } = await request.json()
-
+    console.log("start");
+    console.log(email, ingredientName);
     // email로 사용자를 찾기
     const user = await prisma.user.findUnique({
       where: {
@@ -39,15 +40,19 @@ export async function POST(request: Request) {
     })
 
     // 재료에 대한 영양분 정보 생성
-    const response = await fetch('https://5996qadw98.execute-api.ap-northeast-2.amazonaws.com/Prod/hello', {
+    console.log(0);
+    const response = await fetch('https://vwekbsqcaf.execute-api.ap-northeast-2.amazonaws.com/default/Openai-Food-HelloWorldFunction-X8zN5be3fV7J', {
       method: 'POST',
       body: JSON.stringify({ ingredient_name: ingredientName }),
     })
 
+    console.log(1);
+    console.log(response);
+    console.log(response.status);
     const { nutritionInfo, storageMethod, disposalMethod, category } = await response.json();
-
+    console.log(2);
     console.log(nutritionInfo, storageMethod, disposalMethod, category)
-
+    console.log(3);
     // 재료가 존재하지 않으면 생성
     if (!ingredient) {
       ingredient = await prisma.ingredients.create({

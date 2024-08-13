@@ -1,4 +1,5 @@
 'use client'
+
 import Food from '@/components/Food'
 import { Card } from '@/components/ui/card'
 import { useEffect } from 'react'
@@ -120,10 +121,6 @@ export default function Home() {
           />
         </div>
       </section>
-      {/* 카메라 */}
-      {/* <section>
-        <Camera />
-      </section> */}
     </div>
   )
 }
