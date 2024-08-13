@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: "/getIngredientFromImage",
+        destination: `https://lh6ujwj0tj.execute-api.ap-northeast-2.amazonaws.com/image/MemoryTest-YOLOFunction-EoPm6OiUbjtx`
+      },
+    ];
+  },
+  trailingSlash: true,
   images: {
     domains: ['khtml.kr.object.ncloudstorage.com'],
   },
