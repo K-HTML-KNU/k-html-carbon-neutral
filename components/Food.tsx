@@ -60,17 +60,23 @@ export default function Food({
   nutrition: string
   storage: string
 }) {
-
   return (
     <Drawer>
       <DrawerTrigger>
         <div className="w-[139px] cursor-pointer group">
           {/* img */}
-          <Image
-            src={FOOD_IMAGES_MAP[type]}
-            alt="food_img"
-            className="group-hover:border border-black rounded-md"
-          />
+          {type === "Other Processed Foods"
+            ? (
+              <div className='w-[139px] h-[139px] bg-gray-400 rounded-md flex justify-center items-center'>
+                준비중
+              </div>
+            ) : (
+              <Image
+                src={FOOD_IMAGES_MAP[type]}
+                alt="food_img"
+                className="group-hover:border border-black rounded-md"
+              />
+            )}
           {/* name */}
           <h3 className="text-lg font-semibold">{name}</h3>
           {/* description */}
@@ -86,11 +92,16 @@ export default function Food({
         </DrawerHeader>
         <div className="flex flex-col gap-[16px] px-[16px] max-h-[440px] overflow-y-scroll">
           <div className="flex justify-center">
-            <Image
-              src={FOOD_IMAGES_MAP[type]}
-              alt="food_img"
-              className="w-[50%]"
-            />
+            {type === "Other Processed Foods"
+              ? (
+                <div className='w-[50%] bg-gray-400'></div>
+              ) : (
+                <Image
+                  src={FOOD_IMAGES_MAP[type]}
+                  alt="food_img"
+                  className="w-[50%]"
+                />
+              )}
           </div>
           <p className="text-sm leading-7 line-clamp-2">{description}</p>
           <div>
@@ -103,7 +114,7 @@ export default function Food({
           </div>
         </div>
         <DrawerFooter>
-          <Button>Submit</Button>
+          {/* <Button>Submit</Button> */}
           <DrawerClose>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>

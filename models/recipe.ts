@@ -1,12 +1,28 @@
 export const recipeLevel = [
-  { value: 'Easy', label: '쉬움' },
-  { value: 'Intermediate', label: '보통' },
-  { value: 'Advanced', label: '어려움' },
+  { value: '1', label: '아무나' },
+  { value: '2', label: '초급' },
+  { value: '3', label: '중급' },
+  { value: '4', label: '고급' },
+  { value: '5', label: '장인' },
 ]
 
-export const responseRecipeData = {
+export type RecommendRecipeType = {
+  recipe_name: string
+  ingredient: string[]
+  serving: number
+  difficulty: number
+  cooking_time: number
+  steps: {
+    step: number
+    subtitle: string
+    image: string
+    description: string
+  }[]
+}
+
+export const initRecipData = {
   recipe_name: '달걀볶음밥과 폭탄계란찜',
-  ingredient: '밥, 계란, 간장, 김치, 대파, 참치, 스팸, 마늘, 양파, 깨, 참기름',
+  ingredient: ["밥", "계란", "간장", "김치", "대파", "참치", "스팸", "마늘", "양파", "깨", "참기름"],
   serving: 2,
   difficulty: 2,
   cooking_time: 30,

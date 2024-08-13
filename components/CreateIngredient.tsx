@@ -19,9 +19,10 @@ import { Button } from './ui/button'
 
 import PLUS from '@/meta/images/plus.svg'
 import { useSession } from 'next-auth/react'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { IngredientList } from '@/app/fridge/page'
 
-export default function CreateIngredient() {
+export default function CreateIngredient({ setIngredients }: { setIngredients: Dispatch<SetStateAction<IngredientList>> }) {
   const { data: session } = useSession()
   const [ingredient, setIngredient] = useState('')
 
@@ -50,7 +51,19 @@ export default function CreateIngredient() {
       const data = await response.json()
 
       if (data.code === 200) {
-        window.location.reload();
+        const response = await fetch(`/api/ingredient/get`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: session?.user?.email,
+          }),
+        })
+
+        const data = await response.json();
+
+        setIngredients(data.response);
       } else {
         alert('재료 추가에 실패했습니다.')
       }

@@ -1,5 +1,6 @@
 // app/api/ingredient/add/route.ts
 import { prisma } from '@/prisma/prisma'
+import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server'
 
 const categoryToId: { [key: string]: number } = {
